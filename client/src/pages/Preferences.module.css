@@ -1,0 +1,122 @@
+.container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .leftSection {
+    width: 60%;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .leftSection h1 {
+    font-size: 32px;
+    font-weight: bold;
+    font-size: 48px;
+    font-weight: 800;
+    margin-top: 90px;
+    margin-bottom: 40px;
+    font-family: Poppins;
+font-weight: 800;
+font-size: 48px;
+line-height: 57.6px;
+letter-spacing: -2px;
+
+  }
+  
+  .leftSection p {
+    color: gray;
+    margin-bottom: 20px;
+  }
+  /* Position the logo at the top-left corner */
+  .logo {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    width: 150px;
+    margin-bottom: 0; /* Remove margin since it will be at the top */
+  }
+  
+  
+  .inputField {
+    width: 100%;
+    max-width: 550px;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color:#F6F7F5;
+  }
+  
+  .categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+    width: 75%;
+  }
+  
+  .categoryButton {
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .selected {
+    background: #2da44e;
+    color: white;
+    border: none;
+  }
+  
+  .continueButton {
+    background: #2da44e;
+    color: white;
+    padding: 12px;
+    width: 100%;
+    max-width: 580px;
+    border-radius:64px;
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+    margin-top: 20px;
+  }
+  
+  .rightSection {
+    width: 40%;
+    background: url("../assets/login-image.png") center/cover no-repeat;
+  }
+  .leftSection {
+    width: 60%;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Centers content horizontally */
+    position: relative; /* Keeps the logo fixed at the top-left */
+  }
+  
+  .contentWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Centers content horizontally */
+    text-align: center;
+    
+    width: 100%;
+    margin-left:150px;
+  }
+  
+  .logo {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    width: 150px;
+  }
+  

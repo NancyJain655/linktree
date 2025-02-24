@@ -1,0 +1,148 @@
+/* Parent Container */
+.container {
+    display: flex;
+    height: 100vh;
+    background-color: #fafafa;
+  }
+  
+  .leftSection {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 40px;
+    background: white;
+    position: relative; /* Needed for absolute positioning of the logo */
+  }
+  
+  /* Position the logo at the top-left corner */
+  .logo {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    width: 150px;
+    margin-bottom: 0; /* Remove margin since it will be at the top */
+  }
+  
+  
+  
+  .title {
+    font-size: 48px;
+    font-weight: 800;
+    margin-top: 90px;
+    margin-bottom: 40px;
+    font-family: Poppins;
+font-weight: 800;
+font-size: 48px;
+line-height: 57.6px;
+letter-spacing: -2px;
+
+  }
+  
+  /* Input Fields */
+  .inputContainer {
+    position: relative;
+    width: 100%;
+    max-width: 590px;
+    margin-bottom: 12px;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #f3f4f6;
+  }
+  
+  /* Password Eye Icon */
+  .eyeIcon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  
+  /* Login Button */
+  .loginBtn {
+    position: relative;
+    width: 100%;
+    max-width: 620px;
+    padding: 12px;
+    background-color: #d1d5db;
+    color: black;
+    border-radius: 64px;
+    border:none;
+    cursor: pointer;
+    margin-top: 40px;
+    margin-left: 20px;
+  }
+  
+  
+  .signupText {
+    margin-top: 50px;
+    font-size: 14px;
+  }
+  
+  .signupLink {
+    color: #10b981;
+    cursor: pointer;
+    font-weight: 700;
+    text-decoration: underline;
+  }
+  
+  .show{
+    height:23px;
+    width:22px;
+  }
+  /* Right Section (Image) */
+  .rightSection {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    overflow: hidden;
+  }
+  
+  .image {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+  }
+  .termsText {
+    font-size: 14px;
+    margin-top: 280px;
+    text-align: center;
+    color: #6b7280;
+  }
+  .link {
+    color:#3d3d3d;
+    text-decoration: underline;
+  }
+  .errorText {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+  
+    .leftSection {
+      width: 100%;
+      padding: 20px;
+    }
+  
+    .rightSection {
+      display: none;
+    }
+  }
+  
