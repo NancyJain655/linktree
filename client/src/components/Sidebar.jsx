@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../styles/Sidebar.module.css";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/logo.png"; 
@@ -7,10 +7,17 @@ import iconAnalytics from "../assets/IconAnalytics.png";
 import iconAppearance from "../assets/IconAppearance.png";
 import iconSettings from "../assets/IconSettings.png";
 import iconLinks from "../assets/IconLinks.png";
-import iconSignOut from "../assets/logout.png"; // Add the sign-out icon
+import iconSignOut from "../assets/logout.png"; 
 
 const Sidebar = () => {
   const [showModal, setShowModal] = useState(false);
+  const [userName, setUserName] = useState("Loading..."); // Default placeholder
+
+  useEffect(() => {
+    // Fetch user data from localStorage (or from API if needed)
+    const userData = JSON.parse(localStorage.getItem("user")) || {};
+    setUserName(userData.name || "User"); // Fallback if name is not available
+  }, []);
 
   return (
     <div className={styles.sidebar}>
@@ -39,7 +46,7 @@ const Sidebar = () => {
       {/* User Profile Section */}
       <div className={styles.userProfile} onClick={() => setShowModal(!showModal)}>
         <img src={userAvatar} alt="User" />
-        <h4 className={styles.italicText}>Jenny Wilson</h4>
+        <h4 className={styles.italicText}>{userName}</h4> {/* Dynamic Name */}
       </div>
 
       {/* Sign-Out Modal */}

@@ -26,7 +26,7 @@ const registerUser = async (req, res) => {
 
     await user.save();
 
-    const payload = { user: { id: user.id } };
+    const payload =  { id: user._id } ;
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     res.status(201).json({
@@ -54,7 +54,7 @@ const loginUser = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
 
-    const payload = { user: { id: user.id } };
+    const payload =  { id: user._id } ;
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h' });
 
     res.status(201).json({
@@ -71,9 +71,35 @@ const loginUser = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+const updateUser= async (req, res)=> {
+  const { firstName, lastName, email, password } = req.body;
+  try {
+    const user = await User.findById(req.user.id);
+    console.log(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-
- module.exports = { registerUser, loginUser };
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (email) user.email = email;
+    if (password) {
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+      user.password = hashedPassword;
+    }
+    await user.save();
+    res
+      .status(200)
+      .json({ message: "User information updated successfully", data: user });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
+ module.exports = { registerUser, loginUser ,updateUser};
 
 
 

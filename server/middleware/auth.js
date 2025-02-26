@@ -1,21 +1,34 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const authMiddleware = (req, res, next) => {
-  const token = req.header('Authorization');
-  console.log('Token:', token);
+  let token;
 
+  // Check if token exists in cookies or headers
+  if (req.cookies.token) {
+    token = req.cookies.token;
+  } else if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+
+  // If no token found, return error
   if (!token) {
-    return res.status(401).json({ msg: 'No token, authorization denied' });
+    return res
+      .status(401)
+      .json({ message: "This action is not allowed, token missing" });
   }
 
   try {
-    const decoded = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET);
-    console.log('Decoded user:', decoded.user); // Check what’s being decoded from the token
-    req.user = decoded.user;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // Attach decoded user data to request
+    console.log(req.user);
     next();
   } catch (err) {
-    console.error('Token error:', err);
-    res.status(401).json({ msg: 'Token is not valid' });
+    res.status(401).json({ message: "Invalid or expired token" });
   }
 };
 

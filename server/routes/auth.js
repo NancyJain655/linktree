@@ -6,17 +6,9 @@ const router = express.Router();
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-// @route PUT /api/auth/update
-// @desc Update user
-// router.put('/update', authMiddleware, updateUser);
-                   
 
-// // @route DELETE /api/auth/delete
-// // @desc Delete user
+ router.put('/update', authMiddleware, updateUser);                 
 // router.delete('/delete', authMiddleware, deleteUser);
-
-// // @route POST /api/auth/logout
-// // @desc Logout user
 // router.post('/logout', authMiddleware, logoutUser);
 
 module.exports = router;

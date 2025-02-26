@@ -1,11 +1,6 @@
 import React from 'react';
 import styles from './Settings.module.css';
-import logo from '../assets/logo.png';
-import iconLinks from '../assets/IconLinks.png';
-import iconAppearance from '../assets/IconAppearance.png';
-import iconAnalytics from '../assets/IconAnalytics.png';
-import iconSettings from '../assets/IconSettings.png';
-import userAvatar from '../assets/ImageBoy.png';
+
 import Sidebar from '../components/Sidebar';
 import Main from '../components/Main';
 
