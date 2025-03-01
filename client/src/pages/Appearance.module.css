@@ -1,10 +1,8 @@
-/* Existing Frame Styling - No Changes */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: sans-serif;
+    all: unset;
+    all: revert; /* Reverts styles to default but respects user settings */
 }
+
 .mainContent {
     flex: 1;
     display: flex;
@@ -22,12 +20,22 @@
     display: grid;
     grid-template-columns: 0.7fr 1fr;
     overflow: hidden;
-    margin-top: 20px;
+}
+.profileContainer {
+    width: 90%;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #e5e7eb;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    margin-bottom: 10rem;
 }
 .frame{
     margin: 0 auto;
     display: flex;
-    height: 85%;
+    height: 90%;
     width: 80%;
     flex-direction: column;
     align-items: center;
@@ -36,7 +44,21 @@
     border-radius: 3rem;
     position: relative;
 }
-.frameUsername{
+.customFileUpload {
+    font-size: 0.8rem;
+    background: #28A263;
+    color: #fff;
+    text-align: center;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    display: inline-block;
+    width: 100%;
+    padding: 7px 35px;
+    position: relative;
+    margin-bottom: 1rem;
+  }
+  .frameUsername{
     display: flex;
     flex-direction: column;
     height: 40%;
@@ -57,6 +79,7 @@
     width: 25%;
     border-radius: 50%;
   }
+
   .frameButtons{
     display: flex;
     flex-direction: row;
@@ -70,8 +93,8 @@
     margin-bottom: .7rem;
   }
   .tabBtn {
-    width: 44%;
-    height: 2rem;
+    width: 47%;
+    height: 3rem;
     border: none;
     background-color: #BFBFBF;
     color: black;
@@ -86,13 +109,35 @@
     background-color: #28A263;
     color: white;
 }
+.tabBtn2 {
+    width: 49%;
+    height: 3rem;
+    border: none;
+    background-color: #BFBFBF;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    border-radius: 3rem;
+}
+.tabBtn2.active {
+    background-color: #28A263;
+    color:white;
+}
 .content1{
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
     width: 80%;
     height: 30%;
     overflow-y: auto;
+}
+.lastLogo{
+    position: absolute;
+    bottom: 0rem;
+    
+    img{
+        width: 8rem;
+    }
 }
 .frameLinks{
     display: flex;
@@ -110,6 +155,7 @@
     border-radius: 2rem;
     background-color: #BFBFBF;
     cursor: pointer;
+    margin-bottom: 0.5rem;
 }
 .frameIcon{
     width: 3rem;
@@ -135,33 +181,6 @@
     margin-top: 1rem;
     margin-bottom: 1rem;
 }
-.lastLogo{
-    position: absolute;
-    bottom: 1rem;
-    
-    img{
-        width: 8rem;
-    }
-}
-.profileContainer {
-    width: 90%;
-    margin: 0 auto;
-    padding: 2rem;
-    background-color: #e5e7eb;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    margin-bottom: 10rem;
-}
-
-.profileContainer .pcf {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
-
-
 .frames {
     margin: 0 auto;
     display: flex;
@@ -189,11 +208,16 @@
     flex-direction: column;
     gap: 1rem;
 }
+
 .buttons{
     background-color: #f3f4f6;
     border-radius: 1rem;
     padding-bottom: 1rem;
 }
+.buttonColor p{
+    padding-left: 1rem;
+}
+
 .layoutButtons{
     background-color: #f3f4f6;
     display: flex;
@@ -468,15 +492,15 @@ border-radius: 0.5rem;
     height: 3rem;
     border: none;
 }
-.bucont{
+.buCont{
     background-color: #E0E2D9;
     padding: 5px 15px;
     border-radius: 0.5rem;
-    .butext{
+    .buText{
         font-weight: 200;
         margin: 0;
     }
-    .buinp{
+    .buInp{
         border: none;
         background-color: #E0E2D9;
         color: #000;
@@ -529,22 +553,25 @@ border-radius: 0.5rem;
         font-size: 1rem;
     }
 }
-.ThemesCont{
+.themesCont{
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
-.ThemesDisplay{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap:1rem;
-    padding:1rem;
+.themesDisplay{
+    display: grid !important;
+   
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+    gap: 1rem;
+    padding: 0.5rem;
 }
-.ThemeCont1,.ThemeCont2,.ThemeCont3,.ThemeCont4,.ThemeCont5,.ThemeCont6,.ThemeCont7{
-    height: 12rem;
+.Themecont1,.Themecont2,.Themecont3,.Themecont4,.Themecont5,.Themecont6,.Themecont7{
+    height: 15rem;
     border:1px solid #E0E2D9;
+    display:flex;
+   width:10rem;
 }
-.ThemeCont1{
+.Themecont1{
     background-color: white;
     display: flex;
    align-items: center;
@@ -553,7 +580,7 @@ border-radius: 0.5rem;
         font-size: 7rem;
     }
 }
-.ThemeCont2{
+.Themecont2{
     background-color: #E0E2D9;
     display: flex;
    align-items: center;
@@ -563,7 +590,7 @@ border-radius: 0.5rem;
         color:rgb(235,238,241);
     }
 }
-.ThemeCont3{
+.Themecont3{
     background-color: #272d2f;
     display: flex;
    align-items: center;
@@ -573,7 +600,7 @@ border-radius: 0.5rem;
         color:white;
     }
 }
-.ThemeCont4{
+.Themecont4{
     background-color: black;
     display: flex;
    align-items: center;
@@ -583,7 +610,7 @@ border-radius: 0.5rem;
         color:white;
     }
 }
-.ThemeCont5{
+.Themecont5{
     background-color: #e4f5fe;
     display: flex;
    align-items: center;
@@ -594,7 +621,7 @@ border-radius: 0.5rem;
     
 }
 }
-.ThemeCont6{
+.Themecont6{
     background-color: #e5f9ef;
     display: flex;
    align-items: center;
@@ -605,7 +632,7 @@ border-radius: 0.5rem;
         
     }
 }
-.ThemeCont7{
+.Themecont7{
     background-color: #fcefe3;
     display: flex;
    align-items: center;
@@ -619,14 +646,16 @@ border-radius: 0.5rem;
 .buttonOfTheme{
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 10rem;
     justify-content: center;
 }
 .airg{
     display: flex;
     justify-content: center;
     font-size: 0.8rem;
-}.saveStyleCont{
+    width:10rem;
+}
+.saveStyleCont{
     display: flex;
     width: 100%;
     justify-content: end;

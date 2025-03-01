@@ -48,7 +48,7 @@
     border-radius: 1rem;
     cursor: pointer;
     display: inline-block;
-    width: 100%;
+   
     padding: 7px 35px;
     position: relative;
     margin-bottom: 1rem;
@@ -88,8 +88,8 @@
     margin-bottom: .7rem;
   }
   .tabBtn {
-    width: 44%;
-    height: 2rem;
+    width: 47%;
+    height: 3rem;
     border: none;
     background-color: #BFBFBF;
     color: black;
@@ -104,10 +104,24 @@
     background-color: #28A263;
     color: white;
 }
+.tabBtn2 {
+    width: 49%;
+    height: 3rem;
+    border: none;
+    background-color: #BFBFBF;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    border-radius: 3rem;
+}
+.tabBtn2.active {
+    background-color: #28A263;
+    color:white;
+}
 .content1{
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
     width: 80%;
     height: 30%;
     overflow-y: auto;
@@ -136,6 +150,7 @@
     border-radius: 2rem;
     background-color: #BFBFBF;
     cursor: pointer;
+    margin-bottom: 0.5rem;
 }
 .frameIcon{
     width: 3rem;
@@ -252,7 +267,7 @@
     padding: 1rem;
     border-radius: 10px;
     display: flex;
-    width: 100%;
+    
     flex-direction: column;
 }
 .profileButtons{
@@ -330,19 +345,17 @@
 
 .addLinkContainer button {
     padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    border-radius: 50px;
     cursor: pointer;
 }
 .addLink{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    height: 4rem;
-    background-color: #f3f4f6;
-    width: 52%;
-    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    background-color: #BFBFBF;
+    width: 80%;
+    height:3rem;
+    border-radius: 2rem;
     align-items: center;
-    border-radius: 3rem;
+    justify-content: center;
 }
 /* Default Styles */
 .addBtn {
@@ -391,6 +404,7 @@
     padding: 1rem;
     border-radius: 10px;
     margin-top: 1rem;
+   
 }
 
 .banner {
@@ -402,6 +416,7 @@
     align-items: center;
     justify-content: center;
     height: 20rem;
+    transition: background 0.3s ease-in-out;
 }
 
 .banner img {
@@ -457,3 +472,166 @@
     margin-top: 2rem;
     align-self: flex-end;
 }
+.filteredLinksContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+  
+  .linkCard {
+    background: #f7f7f7;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width:95%;
+    position: relative;
+  }
+  
+  .cardContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .dragIcon {
+    cursor: grab;
+    color: #b0b0b0;
+    font-size: 16px;
+  }
+  
+  .textContent {
+    flex-grow: 1;
+  }
+  
+  .linkTitle,
+  .linkUrl {
+    display: flex;
+    align-items: center;
+    gap:10px;
+  }
+  
+  .linkTitle span,
+  .linkUrl span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .editIcon {
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+  }
+  
+  .toggleDelete {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .toggleSwitch {
+    width: 34px;
+    height: 18px;
+    appearance: none;
+    background: #ccc;
+    border-radius: 999px;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .toggleSwitch:checked {
+    background: #29a745;
+  }
+  
+  .toggleSwitch::before {
+    content: "";
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: 0.3s;
+  }
+  
+  .toggleSwitch:checked::before {
+    left: 18px;
+  }
+  
+  .deleteIcon {
+    width: 16px;
+    cursor: pointer;
+  }
+  
+  .cardFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    font-size: 12px;
+    color: #777;
+  }
+  
+  .statsIcon {
+    width: 14px;
+    margin-right:6px ;
+  }
+  .linkCard1{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    gap:10px;
+    border-radius: 12px;
+    background-color: #f7f7f7;
+  }
+  .colorPicker {
+    padding: 15px;
+    text-align: left;
+  }
+  
+  .colorOptions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .colorCircle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .colorCircle:hover {
+    transform: scale(1.1);
+  }
+  
+  .selectedColor {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+  }
+  
+  .colorSquare {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .colorInput {
+    margin-left: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: #f8f8f8;
+    width: 100px;
+    text-align: center;
+  }

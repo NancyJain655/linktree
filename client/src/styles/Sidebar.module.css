@@ -1,5 +1,5 @@
 .sidebar {
-    width: 15rem;
+    width: 18rem;
     background: white;
     
     display: flex;
@@ -18,11 +18,13 @@
     margin-bottom: 15px;
     display: flex;
     align-items: center;
-    padding: 15px 20px;
+    padding: 15px 25px;
     cursor: pointer;
     background-color: #fff;
     border: 1px solid black;
     border-radius: 2rem;
+    width:12rem;
+    height:2.5rem;
 }
 .profile-section:hover {
     background-color: #e1e1e1;
@@ -34,10 +36,12 @@
     background-color: #f3f3f1;
 }
 .menuItem {
-    width: 100%;
+   
+    width: 16rem;
     display: flex;
     align-items: center;
-    padding: 1.5rem 2rem;
+    padding: 1.5rem 0rem;
+    padding-left: 2rem;
     font-size: 1.2rem;
     font-weight: 500;
     color: #333;

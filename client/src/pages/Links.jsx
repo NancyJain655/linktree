@@ -1,23 +1,117 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Links.module.css"; // Using module CSS
 import Sidebar from "../components/Sidebar";
 import Main from "../components/Main";
 import lastlogo from "../assets/icons/BlackSpark.png";
 import shop from "../assets/icons/shop.png";
 import IconFire from "../assets/icons/FireGrey.png";
+import Modal from "../components/Modal"; // ✅ Import Modal
+import { getLinks } from "../utils/apis/link";
+import stats from "../assets/icons/stats.png";
+
+import deleteIcon from "../assets/icons/deleteIcon.png";
+import edit from "../assets/icons/edit.png";
+import { deleteLink } from "../utils/apis/link"; // Import API function
+import { updateProfile } from "../utils/apis/auth"; // Import update function
+import { getUserData } from "../utils/apis/auth"; // Import update function
 
 function Links() {
   const [selectedTab, setSelectedTab] = useState("Link");
-  const [links, setLinks] = useState([]);
-  const [shops, setShops] = useState([]);
+  const [username, setUsername] = useState(""); // State for dynamic username
+  const [showModal, setShowModal] = useState(false); // ✅ State for modal
+  const [links, setLinks] = useState([]); // Store added links
+  const [filteredLinks, setFilteredLinks] = useState([]);
+  const [selectedColor, setSelectedColor] = useState("#342B26"); // Default color
+  const [bio, setBio] = useState("Bio"); // Bio state
+  
 
-  const handleAddItem = () => {
-    if (selectedTab === "Link") {
-      setLinks([...links, `New Link ${links.length + 1}`]);
-    } else {
-      setShops([...shops, `New Shop ${shops.length + 1}`]);
+
+  const colors = ["#342B26", "#FFFFFF", "#000000"];
+  
+  const handleDelete = async (id) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("No token found, cannot delete link.");
+      return;
+    }
+  
+    try {
+      await deleteLink(id, token);
+      setLinks((prevLinks) => prevLinks.filter((link) => link._id !== id)); // Remove deleted link from state
+      console.log("Link deleted successfully");
+    } catch (error) {
+      console.error("Failed to delete link:", error);
     }
   };
+  const handleSave = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("No token found, cannot update profile.");
+      return;
+    }
+  
+    try {
+      const response = await updateProfile(bio, selectedColor, token);
+      console.log("Profile updated successfully:", response);
+      alert("Profile updated successfully!"); // Show success message
+      fetchUserData();
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      alert("Failed to update profile!");
+    }
+  };
+  const fetchUserData = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await getUserData(token); // API call to fetch latest user data
+      setBio(response.Bio);
+      setSelectedColor(response.backColor);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  useEffect(() => {
+    console.log("useEffect is running..."); // ✅ Step 1: Check if this runs
+    const storedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    console.log("Stored User from LocalStorage:", storedUser); // ✅ Step 2: Check if user is found
+    if (storedUser) {
+      const userObject = JSON.parse(storedUser);
+      console.log("Parsed User Object:", userObject);
+      setUsername(userObject.username);
+
+      const fetchLinks = async () => {
+        if (token) {
+          try {
+            const fetchedLinks = await getLinks(token);
+            console.log("Fetched Links from API:", fetchedLinks);
+
+            if (Array.isArray(fetchedLinks)) {
+              setLinks(fetchedLinks);
+              console.log("Links state after setting:", links);
+
+            } else {
+              console.error("API returned invalid format:", fetchedLinks);
+            }
+          } catch (error) {
+            console.error("Error fetching links:", error);
+          }
+        }
+      };
+      fetchLinks();
+    }
+  }, []);
+  useEffect(() => {
+    console.log("Current selected tab:", selectedTab);
+    console.log("Current links:", links);
+    const filtered = links.filter((link) => link.type?.toLowerCase() === selectedTab.toLowerCase());
+    console.log(`Filtered Links for ${selectedTab}:`, filtered);
+    setFilteredLinks(filtered);
+  }, [selectedTab, links]);
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -27,13 +121,13 @@ function Links() {
         <div className={styles.contentWrapper}>
           <div className={styles.frameSection} style={{ paddingTop: "2rem" }}>
             <div className={styles.frame}>
-              <div className={styles.frameUsername}>
+              <div className={styles.frameUsername} style={{ backgroundColor: selectedColor }}>
                 <img
                   src="https://www.w3schools.com/howto/img_avatar.png"
                   alt="User Avatar"
                   className={styles.frameImg}
                 />
-                <h2>@nap_1011</h2>
+                <h2>{username}</h2>
               </div>
               <div className={styles.frameButtons}>
                 <button
@@ -50,24 +144,21 @@ function Links() {
                 </button>
               </div>
               <div className={styles.content1}>
-                {selectedTab === "Link" ? (
-                  <div className={styles.frameLinks}>
-                    {["Latest YouTube Video", "Latest Instagram Reel", "Latest YouTube Video", "Latest Instagram Reel"].map(
-                      (item, index) => (
-                        <div key={index} className={styles.frameLink}>
-                          <span className={styles.frameIcon}></span>
-                          <span>{item}</span>
-                        </div>
-                      )
-                    )}
-                  </div>
-                ) : (
-                  <p>Showing Shop Content</p>
-                )}
+              {filteredLinks.length > 0 ? (
+          <div className={styles.linkList}>
+            {filteredLinks.map((link, index) => (
+              <div key={index} className={styles.frameLink}>
+                <span className={styles.frameIcon}></span>
+                <span>{link.title || link.shortUrl}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>No links available</p>
+        )}
               </div>
               <button className={styles.getConnected}>Get Connected</button>
-              <div className={styles.lastLogo}><img src={lastlogo} alt="" />
-              </div>
+              <div className={styles.lastLogo}><img src={lastlogo} alt="" /></div>
             </div>
           </div>
 
@@ -93,85 +184,116 @@ function Links() {
               </div>
               <div className={styles.profileInput}>
                 <label className={styles.label}>Profile Title</label>
-                <h4>@nap_1011</h4>
+                <h4>{username}</h4>
               </div>
               <div className={styles.profileBio}>
                 <label className={styles.label}>Bio</label>
-                <textarea className={styles.textofBio} defaultValue="Bio"></textarea>
+                <textarea className={styles.textofBio} value={bio} onChange={(e) => setBio(e.target.value)}></textarea>
               </div>
             </div>
 
             {/* Links Section */}
             <div className={styles.addLinkContainer}>
-              <div className={styles.addLink}>
-                <button
-                  className={`${styles.addBtn} ${selectedTab === "Link" ? styles.active : ""}`}
-                  onClick={() => setSelectedTab("Link")}
-                >  <img src={shop} alt="" />
-                  Add Link
-                </button>
-                <button
-                  className={`${styles.shopBtn} ${selectedTab === "Shop" ? styles.active : ""}`}
-                  onClick={() => setSelectedTab("Shop")}
-                >
-                  Add Shop
-                  <img src={shop} alt="" />
-                </button>
-              </div>
-
-              {/* Dynamic Add Button */}
-              <button className={styles.fullWidth} onClick={handleAddItem}>
-                + Add {selectedTab}
+            <div className={styles.addLink}>
+              <button
+                className={`${styles.tabBtn2} ${selectedTab === "Link" ? styles.active : ""}`}
+                onClick={() => setSelectedTab("Link")}
+              >
+                Link
               </button>
-              <div className={styles.content}>
-                {selectedTab === "Link" && links.length > 0 && (
-                  <ul>
-                    {links.map((link, index) => (
-                      <li key={index}>{link}</li>
-                    ))}
-                  </ul>
-                )}
-                {selectedTab === "Shop" && shops.length > 0 && (
-                  <ul>
-                    {shops.map((shop, index) => (
-                      <li key={index}>{shop}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+              <button
+                className={`${styles.tabBtn2} ${selectedTab === "Shop" ? styles.active : ""}`}
+                onClick={() => setSelectedTab("Shop")}
+              >
+                Shop
+              </button>
+            </div>
+
+            <button className={styles.fullWidth} onClick={() => setShowModal(true)}>
+              + Add {selectedTab}
+            </button>
+            <div className={styles.filteredLinksContainer}>
+  {filteredLinks.length > 0 ? (
+    filteredLinks.map((link, index) => (
+      <div key={index} className={styles.linkCard1}>
+        <span className={styles.dragIcon}>⋮⋮</span> {/* Drag handle */}
+      <div key={index} className={styles.linkCard}>
+
+        
+        <div className={styles.cardContent}>
+          
+          <div className={styles.textContent}>
+            <div className={styles.linkTitle}>
+              <span>{link.title || "Instagram"}</span>
+              <img src={edit} alt="Edit" className={styles.editIcon} />
+            </div>
+            <div className={styles.linkUrl}>
+              <span>{link.shortUrl || "https://www.instagram.com/example"}</span>
+              <img src={edit} alt="Edit" className={styles.editIcon} />
+            </div>
+          </div>
+          <div className={styles.toggleDelete}>
+            <input type="checkbox" className={styles.toggleSwitch} checked={true} />
+          </div>
+        </div>
+        <div className={styles.cardFooter}>
+          <div className={styles.clickStat}>
+          <img src={stats} alt="Stats" className={styles.statsIcon} />
+          <span>0 clicks</span>
+          </div>
+          <img src={deleteIcon} alt="Delete" onClick={() => handleDelete(link._id)} className={styles.deleteIcon} />
+        </div>
+      </div>
+      </div>
+    ))
+  ) : (
+    <p>No links available</p>
+  )}
+</div>
             </div>
 
             {/* Banner Section */}
             <label>Banner</label>
-            <div className={styles.bannerContainer}>
-              <div className={styles.banner}>
+            <div className={styles.bannerContainer} >
+              <div className={styles.banner} style={{ backgroundColor: selectedColor }}>
                 <img
                   src="https://www.w3schools.com/howto/img_avatar.png"
                   alt=""
                   className={styles.frameImg}
                 />
-                <h4>@nap_1011</h4>
-                <h3> <img
-                    src={IconFire}
-                    alt=""
-                    style={{ width: "0.9rem", marginRight: "2px" }}
-                  />{" "}/nap_1011</h3>
+                <h4>{username}</h4>
+                <h3>
+                  <img src={IconFire} alt="" style={{ width: "0.9rem", marginRight: "2px" }} />
+                  {" /"}{username}
+                </h3>
               </div>
-              <label>Custom Background Color</label>
-              <div className={styles.colorOptions}>
-                <span className={`${styles.color} ${styles.dark}`}></span>
-                <span className={`${styles.color} ${styles.light}`}></span>
-                <span className={`${styles.color} ${styles.black}`}></span>
-              </div>
-              <div className={styles.colorInput}>
-                <span className={styles.color}></span>
-                <input type="text" placeholder="#000000" />
-              </div>
+              <div className={styles.colorPicker}>
+        <p>Custom Background Color</p>
+        <div className={styles.colorOptions}>
+          {colors.map((color) => (
+            <button
+              key={color}
+              className={styles.colorCircle}
+              style={{ backgroundColor: color }}
+              onClick={() => setSelectedColor(color)}
+            />
+          ))}
+        </div>
+        
+        {/* Selected Color Preview & Input Field */}
+        <div className={styles.selectedColor}>
+          <div className={styles.colorSquare} style={{ backgroundColor: selectedColor }} />
+          <input type="text" value={selectedColor} readOnly className={styles.colorInput} />
+        </div>
+      </div>
             </div>
-            <button className={styles.saveBtn}>Save</button>
+            <button className={styles.saveBtn} onClick={handleSave}>Save</button>
           </div>
         </div>
       </div>
+
+      {/* ✅ Modal: Opens with Selected Tab ONLY from the Full Width Section Button */}
+      {showModal && <Modal onClose={() => setShowModal(false)} selectedTab={selectedTab}/>}
     </div>
   );
 }

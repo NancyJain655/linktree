@@ -185,16 +185,17 @@ const Appearence = () => {
       setFrameBgColor(computedStyle.backgroundColor);
     }
   };
+  const themeMapping = {
+   "Air Snow":"Themecont1" ,
+    "Air Gray":"Themecont2" ,
+   "Air Smoke" : "Themecont3",
+    "Air Black": "Themecont4",
+    "Mineral Blue" :"Themecont5",
+   "Mineral Green": "Themecont6",
+    "Mineral Orange": "Themecont7",
+  };
   const handleSaveAppearance = async () => {
-    const themeMapping = {
-      Themecont1: "Air Snow",
-      Themecont2: "Air Gray",
-      Themecont3: "Air Smoke",
-      Themecont4: "Air Black",
-      Themecont5: "Mineral Blue",
-      Themecont6: "Mineral Green",
-      Themecont7: "Mineral Orange",
-    };
+    
 
     const appearanceData = {
       layout: selectedLayout,
@@ -205,20 +206,20 @@ const Appearence = () => {
       themes: themeMapping[selectedTheme] || "Air Snow", // ✅ Ensure a valid value
     };
 
-    try {
-      const token = localStorage.getItem("token"); // Get token from storage
-      const response = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/api/appearance`,
-        appearanceData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+    // try {
+    //   const token = localStorage.getItem("token"); // Get token from storage
+    //   const response = await axios.put(
+    //     `${import.meta.env.VITE_BACKEND_URL}/api/appearance`,
+    //     appearanceData,
+    //     {
+    //       headers: { Authorization: `Bearer ${token}` },
+    //     }
+    //   );
 
-      console.log("Appearance updated:", response.data);
-    } catch (error) {
-      console.error("Error updating appearance:", error);
-    }
+    //   console.log("Appearance updated:", response.data);
+    // } catch (error) {
+    //   console.error("Error updating appearance:", error);
+    // }
   };
 
   return (
@@ -227,186 +228,223 @@ const Appearence = () => {
     <div className={styles.mainContent}>
       <Main />
       <div className={styles.contentWrapper}>
-        <div className={styles.frameSection}>
-          <div className={styles.frame} style={frameStyle}>
-            <div className={styles.frameUsername}>
-              <img
-                src="https://www.w3schools.com/howto/img_avatar.png"
-                alt=""
-                className={styles.frameImg}
+        <div className={styles.frameSection} style={{ paddingTop: "2rem" }}>
+                    <div className={styles.frame}>
+                      <div className={styles.frameUsername} >
+                        <img
+                          src="https://www.w3schools.com/howto/img_avatar.png"
+                          alt="User Avatar"
+                          className={styles.frameImg}
+                        />
+                        <h2>tester</h2>
+                      </div>
+                      <div className={styles.frameButtons}>
+                        <button
+                          className={`${styles.tabBtn} ${selectedTab === "Link" ? styles.active : ""}`}
+                          onClick={() => setSelectedTab("Link")}
+                        >
+                          Link
+                        </button>
+                        <button
+                          className={`${styles.tabBtn} ${selectedTab === "Shop" ? styles.active : ""}`}
+                          onClick={() => setSelectedTab("Shop")}
+                        >
+                          Shop
+                        </button>
+                      </div>
+                      <div className={styles.content1}>
+                      {selectedTab === "Link" ? (
+                  <div className={styles.frameLinks}>
+                    {["Latest YouTube Video", "Latest Instagram Reel", "Latest YouTube Video", "Latest Instagram Reel"].map(
+                      (item, index) => (
+                        <div key={index} className={styles.frameLink}>
+                          <span className={styles.frameIcon}></span>
+                          <span>{item}</span>
+                        </div>
+                      )
+                    )}
+                  </div>
+                ) : (
+                  <p>Showing Shop Content</p>
+                )}
+                      </div>
+                      <button className={styles.getConnected}>Get Connected</button>
+                      <div className={styles.lastLogo}><img src={lastlogo} alt="" /></div>
+                    </div>
+                  </div>
+
+                  <div className={styles.profileContainer}>
+      {/* Layout Section */}
+      <div className={styles.layout}>
+        <label className={styles.nameOfLay}>Layout</label>
+        <div className={styles.layoutButtons}>
+          <button className={styles.layoutBtn}>
+            <img className={styles.layoutImg} src={stack} />
+            Stack
+          </button>
+          <button className={styles.layoutBtn}>
+            <img className={styles.layoutImg} src={grid} />
+            Grid
+          </button>
+          <button className={styles.layoutBtn}>
+            <img className={styles.layoutImg} src={Carousel} />
+            Carousel
+          </button>
+        </div>
+      </div>
+
+      {/* Button Background Section */}
+      <div className={styles.buttonBg}>
+        <p className={styles.nameOfLay1}>Buttons</p>
+        <div className={styles.buttons}>
+          {buttonGroups.map((group, index) => (
+            <div
+              key={index}
+              className={
+                group.label === "Special" ? styles.layoutButtons12 : styles.layoutButtons1
+              }
+            >
+              <p>{group.label}</p>
+              <div
+                className={
+                  group.label === "Special"
+                    ? styles.layoutButtons3
+                    : styles.layoutButtons2
+                }
+              >
+                {group.buttons.map((button) => (
+                  <button
+                    key={button}
+                    className={`${styles[button]} ${
+                      selected === button ? styles.selected : ""
+                    }`}
+                    onClick={() => handleButtonClick(button)}
+                  >
+                    {button.includes("colopatlet") ? "" : ""}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Button Color */}
+        <div className={styles.buttonColor}>
+          <p>Button color</p>
+          <div className={styles.buttonConts1}>
+            <input
+              className={styles.inputOfColor}
+              type="color"
+              value={buttonColor}
+              onChange={handleButtonColorChange}
+            />
+            <div className={styles.buCont}>
+              <p className={styles.buText}>Button color</p>
+              <input
+                type="text"
+                className={styles.buInp}
+                value={buttonColor}
+                onChange={handleButtonColorChange}
+                placeholder="#000000"
               />
-              <h2>@islam_51</h2>
-            </div>
-            <div className={styles.frameButtons}>
-              <button
-                className={`${styles.tabBtn} ${
-                  selectedTab === "Link" ? styles.active : ""
-                }`}
-                onClick={() => setSelectedTab("Link")}
-              >
-                Link
-              </button>
-              <button
-                className={`${styles.tabBtn} ${
-                  selectedTab === "Shop" ? styles.active : ""
-                }`}
-                onClick={() => setSelectedTab("Shop")}
-              >
-                Shop
-              </button>
-            </div>
-            <div className={styles.content1}>
-              {selectedTab === "Link" ? (
-                <div className={styles.frameLinks}>
-                  {[
-                    "Latest YouTube Video",
-                    "Latest Instagram Reel",
-                    "Latest YouTube Video",
-                    "Latest Instagram Reel",
-                    "Latest YouTube Video",
-                    "Latest Instagram Reel",
-                  ].map((text, index) => (
-                    <div key={index} className={styles.frameLink} style={frameStyle}>
-                      <span className={styles.frameIcon}></span>
-                      <span>{text}</span>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className={styles.frameLinks}>
-                  {[
-                    "Latest Tshirt shopify",
-                    "Latest pant olx",
-                    "Latest shirt shopify",
-                    "Latest jacket flipkart",
-                    "Latest mobile anything",
-                    "Latest laptop other",
-                  ].map((text, index) => (
-                    <div key={index} className={styles.frameLink} style={frameStyle}>
-                      <span className={styles.frameIcon}></span>
-                      <span>{text}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            <button className={styles.getConnected}>Get Connected</button>
-            <div className={styles.lastLogo}>
-              <img src={lastlogo} alt="" />
             </div>
           </div>
         </div>
 
-        <div className={styles.profileContainer}>
-          <div className={styles.layout}>
-            <label className={styles.nameOfLay}>Layout</label>
-            <div className={styles.layoutButtons}>
-              <button className={styles.layoutBtn}>
-                <img className={styles.layoutImg} src={stack} />
-                Stack
-              </button>
-              <button className={styles.layoutBtn}>
-                <img className={styles.layoutImg} src={grid} />
-                Grid
-              </button>
-              <button className={styles.layoutBtn}>
-                <img className={styles.layoutImg} src={Carousel} />
-                Carousel
-              </button>
+        {/* Button Font Color */}
+        <div className={styles.buttonColor}>
+          <p>Button font color</p>
+          <div className={styles.buttonConts1}>
+            <input
+              className={styles.inputOfColor}
+              type="color"
+              value={buttonTextColor}
+              onChange={handleButtonTextColorChange}
+            />
+            <div className={styles.buCont}>
+              <p className={styles.buText}>Button font color</p>
+              <input
+                type="text"
+                className={styles.buInp}
+                value={buttonTextColor}
+                onChange={handleButtonTextColorChange}
+                placeholder="#FFFFFF"
+              />
             </div>
           </div>
+        </div>
+      </div>
 
-          <div className={styles.buttonBg}>
-            <p className={styles.nameOfLay1}>Buttons</p>
-            {buttonGroups.map((group, index) => (
-              <div key={index} className={styles.layoutButtons1}>
-                <p>{group.label}</p>
-                <div className={styles.layoutButtons2}>
-                  {group.buttons.map((button) => (
-                    <button
-                      key={button}
-                      className={`${styles[button]} ${
-                        selected === button ? styles.selected : ""
-                      }`}
-                      onClick={() => handleButtonClick(button)}
-                    ></button>
-                  ))}
-                </div>
-              </div>
-            ))}
-
-            <div className={styles.buttonColor}>
-              <p>Button color</p>
-              <div className={styles.buttonConts1}>
-                <input
-                  className={styles.inputOfColor}
-                  type="color"
-                  value={buttonColor}
-                  onChange={handleButtonColorChange}
-                />
-              </div>
+      {/* Fonts Section */}
+      <div className={styles.fontsStyle}>
+        <label>Fonts</label>
+        <div className={styles.fontCont}>
+          <h5 style={{ marginLeft: "0.8rem" }}>Font</h5>
+          <div className={styles.fontsContainer}>
+            <div className={styles.fontText} style={{ color: buttonTextColor }}>
+              Aa
             </div>
+            <select className={styles.fontInput} onChange={handleFontChange}>
+              <option value="DM Sans">DM Sans</option>
+              <option value="Arial">Arial</option>
+              <option value="Poppins">Poppins</option>
+            </select>
+          </div>
 
-            <div className={styles.buttonColor}>
-              <p>Button font color</p>
-              <div className={styles.buttonConts1}>
+          {/* Font Color */}
+          <div className={styles.fontCont1}>
+            <h5 style={{ marginLeft: "1rem", marginTop: "1rem", marginBottom: "0.5rem" }}>
+              Color
+            </h5>
+            <div className={styles.fontsContainers}>
+              <input
+                className={styles.inputOfColor}
+                type="color"
+                value={buttonTextColor}
+                onChange={handleButtonTextColorChange}
+              />
+              <div className={styles.buCont}>
+                <p className={styles.buText}>Font color</p>
                 <input
-                  className={styles.inputOfColor}
-                  type="color"
+                  type="text"
+                  className={styles.buInp}
                   value={buttonTextColor}
                   onChange={handleButtonTextColorChange}
+                  placeholder="#000000"
                 />
               </div>
             </div>
           </div>
-
-          <div className={styles.fontsStyle}>
-            <label>Fonts</label>
-            <div className={styles.fontCont}>
-              <h5>Font</h5>
-              <select className={styles.fontInput}>
-                <option value="DM Sans">DM Sans</option>
-                <option value="Arial">Arial</option>
-                <option value="Poppins">Poppins</option>
-              </select>
-            </div>
-          </div>
-
-          <div className={styles.themesCont}>
-            <label className={styles.nameOfLay}>Themes</label>
-            <div className={styles.themesDisplay}>
-              {[
-                "Air Snow",
-                "Air Grey",
-                "Air Smoke",
-                "Air Black",
-                "Mineral Blue",
-                "Mineral Green",
-                "Mineral Orange",
-              ].map((themeName, index) => (
-                <div className={styles.buttonOfTheme} key={index}>
-                  <button
-                    className={`${styles[`Themecont${index + 1}`]} ${
-                      selectedTheme === `Themecont${index + 1}`
-                        ? styles.selectedTheme
-                        : ""
-                    }`}
-                    onClick={() => handleThemeChange(`Themecont${index + 1}`)}
-                  >
-                    <span>&#9776;</span>
-                  </button>
-                  <span className={styles.airg}>{themeName}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.saveStyleCont}>
-            <button className={styles.styleSave} onClick={handleSaveAppearance}>
-              Save
-            </button>
-          </div>
         </div>
+      </div>
+
+      {/* Themes Section */}
+      <div className={styles.themesCont}>
+        <label className={styles.nameOfLay}>Themes</label>
+        <div className={styles.themesDisplay}>
+          {Object.entries(themeMapping).map(([themeName, themeClass]) => (
+            <div className={styles.buttonOfTheme} key={themeClass}>
+              <button
+               className={`${styles[themeClass]} ${
+                selectedTheme === themeClass ? styles.selectedTheme : ""
+              }`}
+                onClick={() => handleThemeChange(themeClass)}
+              >
+                <span>&#9776;</span>
+              </button>
+              <span className={styles.airg}>{themeName}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <div className={styles.saveStyleCont}>
+        <button className={styles.styleSave} onClick={handleSaveAppearance}>
+          Save
+        </button>
+      </div>
+    </div>
       </div>
     </div>
   </div>

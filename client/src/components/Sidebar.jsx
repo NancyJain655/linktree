@@ -1,22 +1,34 @@
+
 import React, { useState, useEffect } from "react";
 import styles from "../styles/Sidebar.module.css";
 import { NavLink } from "react-router-dom";
-import logo from "../assets/logo.png"; 
-import userAvatar from "../assets/ImageBoy.png"; 
+import logo from "../assets/logo.png";
+import userAvatar from "../assets/ImageBoy.png";
 import iconAnalytics from "../assets/IconAnalytics.png";
 import iconAppearance from "../assets/IconAppearance.png";
 import iconSettings from "../assets/IconSettings.png";
 import iconLinks from "../assets/IconLinks.png";
-import iconSignOut from "../assets/logout.png"; 
+import iconSignOut from "../assets/logout.png";
 
 const Sidebar = () => {
   const [showModal, setShowModal] = useState(false);
-  const [userName, setUserName] = useState("Loading..."); // Default placeholder
+  const [userFirstName, setUserFirstName] = useState("User");
+  const [userLastName, setUserLastName] = useState("");
 
   useEffect(() => {
-    // Fetch user data from localStorage (or from API if needed)
-    const userData = JSON.parse(localStorage.getItem("user")) || {};
-    setUserName(userData.name || "User"); // Fallback if name is not available
+    const updateUserData = () => {
+      const userData = JSON.parse(localStorage.getItem("user")) || {};
+      setUserFirstName(userData.firstName || "User");
+      setUserLastName(userData.lastName || "");
+    };
+
+    updateUserData(); 
+
+    window.addEventListener("storage", updateUserData);
+
+    return () => {
+      window.removeEventListener("storage", updateUserData);
+    };
   }, []);
 
   return (
@@ -43,13 +55,10 @@ const Sidebar = () => {
         <label>Settings</label>
       </NavLink>
 
-      {/* User Profile Section */}
       <div className={styles.userProfile} onClick={() => setShowModal(!showModal)}>
         <img src={userAvatar} alt="User" />
-        <h4 className={styles.italicText}>{userName}</h4> {/* Dynamic Name */}
+        <h4 className={styles.italicText}>{userFirstName} {userLastName}</h4> {/* Dynamic Name */}
       </div>
-
-      {/* Sign-Out Modal */}
       {showModal && (
         <div className={styles.modal}>
           <button className={styles.signOutButton}>
