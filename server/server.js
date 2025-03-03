@@ -12,7 +12,7 @@ require('dotenv').config();
 const app = express();
 connectDB();
 app.use(cors({
-  origin: "http://localhost:5174", // Allow your frontend URL
+  origin: "https://linktree-tan-one.vercel.app/", // Allow your frontend URL
   credentials: true, // Allow cookies and authentication headers
   methods: "GET,POST,PUT,DELETE",
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
@@ -29,7 +29,7 @@ app.use("/api/analytics", analyticsRoutes);
 app.use("/api/appearance", appearanceRoutes);
 
 
-const PORT = process.env.PORT || 5008;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
