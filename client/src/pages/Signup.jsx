@@ -24,7 +24,7 @@ const Signup = () => {
               autoClose: 3000,
               hideProgressBar: false,
               closeOnClick: true,
-              pauseOnHover: falsr,
+              pauseOnHover: false,
               draggable: true,
               progress: undefined,
               style: {
@@ -98,8 +98,6 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-  
-    setLoading(true);
     try {
       const response = await registerUser(formData);
   
@@ -108,13 +106,17 @@ const Signup = () => {
   
         if (localStorage.getItem("token")) { 
           showToast("User successfully registered","success");// Check if token is actually stored
-          navigate("/preferences"); // Redirect only if token is present
+          
+          setTimeout(() => {
+            navigate("/preferences"); // Redirect to login page after toast is displayed
+          }, 2000);// Redirect only if token is present
         }
       } else {
         showToast("something went wrong","error");// Show error message if no token is returned
       }
     } catch (err) {
-      setFormErrors({ ...formErrors, general: err.msg || "The password is incorrect." });
+      console.log(err);
+      showToast("Not able to register","error");
     } finally {
       setLoading(false);
     }
@@ -182,8 +184,8 @@ const Signup = () => {
 
           {formErrors.general && <p className={styles.error}>{formErrors.general}</p>}
 
-          <button className={styles.signupBtn} type="submit" disabled={loading}>
-            {loading ? "Creating..." : "Create an account"}
+          <button className={styles.signupBtn} type="submit" >
+             Create an account
           </button>
         </form>
         <p className={styles.termsText}>

@@ -1,77 +1,76 @@
 .analyticsContainer {
-    display: flex;
-    background: #f8f8f8;
-    height: 100vh;
-    overflow: hidden;
+  display: flex;
+  background: #f4f4f4;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .mainContent {
-    bottom: 35px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    padding: 20px;
-    overflow: hidden; /* Prevents entire page from scrolling */
+  bottom: 35px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 20px;
+  overflow: hidden; 
 }
 
 /* Overview Header */
 .overviewHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-   
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
 .overviewHeader h3 {
-    font-size: 20px;
-    font-weight: 600;
-    color: #333;
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
 }
 
 /* Calendar */
 .calendar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: white;
-    padding: 8px 12px;
-    border-radius: 20px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  height: 60px;
 }
 
 .calendarIcon {
-    color: #4b4b4b;
+  color: #4b4b4b;
 }
 
 .calendar span {
-    font-size: 14px;
-    color: #4b4b4b;
+  font-size: 14px;
+  color: #4b4b4b;
 }
 
 /* Overview Cards */
 .overviewSection {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
 .card {
-    flex: 1;
-    background: #22d679;
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    height:140px;
+  flex: 1;
+  background: #22d679;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  height:140px;
 }
 
 .lightGreen {
-    background: #DCFFEB;
-    color: black;
-    font-family: Poppins;
+  background: #DCFFEB;
+  color: black;
+  font-family: Poppins;
 font-weight: 600;
 
 letter-spacing: 0%;
@@ -80,109 +79,109 @@ letter-spacing: 0%;
 
 /* Charts */
 .chartsContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
 }
 
 .largeChart, .smallChart, .fullWidthChart {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
 
 }
 
 .smallCharts {
-    display: flex;
-    gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 .chartFullWidth {
-    width: 100%;
-    max-width: 1150px;
-    height: 380px; /* Adjust as needed */
-    margin-top: 20px;
-    background-color: white;
-    border-radius: 15px;
-  }
-  
-  .chartRow {
-    display: flex;
-    gap: 20px;
-    margin-top: 15px;
-   
-  }
-  .card p{
-    padding:20px 0px;
-  }
-  /* .card h2{
-    padding:20px;
-  } */
-  
-  .chartFullWidth2 {
-    width: 100%;
-    max-width: 700px;
-    height: 400px; /* Adjust as needed */
-    margin-top: 20px;
-    background-color: white;
-    border-radius: 15px;
-  }
+  width: 100%;
+  max-width: 1150px;
+  height: 380px; /* Adjust as needed */
+  margin-top: 20px;
+  background-color: white;
+  border-radius: 15px;
+}
+
+.chartRow {
+  display: flex;
+  gap: 20px;
+  margin-top: 15px;
+ 
+}
+.card p{
+  padding:20px 0px;
+}
+/* .card h2{
+  padding:20px;
+} */
+
+.chartFullWidth2 {
+  width: 100%;
+  max-width: 700px;
+  height: 400px; /* Adjust as needed */
+  margin-top: 20px;
+  background-color: white;
+  border-radius: 15px;
+}
 .contentWrapper {
-    flex:1;
-    overflow-y: auto;
-    position: relative;
-    bottom:40px;
-    margin-top: 60px;
+  flex:1;
+  overflow-y: auto;
+  position: relative;
+  bottom:40px;
+  margin-top: 60px;
 }
 .chartHalf > canvas {
-    flex: 1 !important;
-    flex-direction: column;
-  align-items: center; /* Centers title & chart */
-  justify-content: flex-start;
-    height: 350px !important;
-    background-color: white !important;
-   
-    border-radius: 15px !important;
-    padding: 20px;
-    
-  }
-.barChart {
-    width: 50%; /* Adjust bar chart width */
-    background-color: white;
-    border-radius: 15px;
-  }
+  flex: 1 !important;
+  flex-direction: column;
+align-items: center; /* Centers title & chart */
+justify-content: flex-start;
+  height: 350px !important;
+  background-color: white !important;
+ 
+  border-radius: 15px !important;
+  padding: 20px;
   
-  .pieChart {
-    width: 50%; /* Adjust pie chart width */
-    background-color: white;
-    border-radius: 15px;
-  }
-  .chartHalf canvas {
-    width: 100% !important;
-    
+}
+.barChart {
+  width: 50%; /* Adjust bar chart width */
+  background-color: white;
+  border-radius: 15px;
+}
+
+.pieChart {
+  width: 50%; /* Adjust pie chart width */
+  background-color: white;
+  border-radius: 15px;
+}
+.chartHalf canvas {
+  width: 100% !important;
+  
 }
 .chartTitle {
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
-    font-size: 18px;
-    font-weight: 600;
-    
-    text-align: left;
-    width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  
+  text-align: left;
+  width: 100%;
 
-    padding-top: 20px;
-    padding-left: 20px;
+  padding-top: 20px;
+  padding-left: 20px;
 }
 .chartTitle2 {
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
-    font-size: 18px;
-    font-weight: 600;
-   
-    text-align: left;
-    width: 100%;
-    padding-top: 20px;
-    padding-left: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+ 
+  text-align: left;
+  width: 100%;
+  padding-top: 20px;
+  padding-left: 20px;
 }

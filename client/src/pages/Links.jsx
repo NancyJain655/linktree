@@ -10,6 +10,7 @@ import { getLinks } from "../utils/apis/link";
 import stats from "../assets/icons/stats.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import shareFrame from "../assets/icons/shareFrame.png";
 
 
 import deleteIcon from "../assets/icons/deleteIcon.png";
@@ -145,12 +146,15 @@ function Links() {
           <div className={styles.frameSection} style={{ paddingTop: "2rem" }}>
             <div className={styles.frame}>
               <div className={styles.frameUsername} style={{ backgroundColor: selectedColor }}>
+                <button className={styles.shareBtn} >
+                        <img src={shareFrame} alt="Share" />
+                    </button>
                 <img
                   src="https://www.w3schools.com/howto/img_avatar.png"
                   alt="User Avatar"
                   className={styles.frameImg}
                 />
-                <h2>{username}</h2>
+                <h2 style={{ color: selectedColor === "#000000" || selectedColor === "#342B26" ? "white" : "black" }}>{username}</h2>
               </div>
               <div className={styles.frameButtons}>
                 <button
@@ -171,8 +175,9 @@ function Links() {
           <div className={styles.linkList}>
             {filteredLinks.map((link, index) => (
               <div key={index} className={styles.frameLink}>
+                <a key={index} href={link.url} target="_blank" rel="noopener noreferrer" className={styles.frameLink}>
                 <span className={styles.frameIcon}></span>
-                <span>{link.title || link.shortUrl}</span>
+                <span>{link.title || link.shortUrl}</span></a>
               </div>
             ))}
           </div>
@@ -239,6 +244,7 @@ function Links() {
   {filteredLinks.length > 0 ? (
     filteredLinks.map((link, index) => (
       <div key={index} className={styles.linkCard1}>
+
         <span className={styles.dragIcon}>⋮⋮</span> {/* Drag handle */}
       <div key={index} className={styles.linkCard}>
 

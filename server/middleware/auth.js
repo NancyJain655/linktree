@@ -4,8 +4,6 @@ dotenv.config();
 
 const authMiddleware = (req, res, next) => {
   let token;
-
-  // Check if token exists in cookies or headers
   if (req.cookies.token) {
     token = req.cookies.token;
   } else if (

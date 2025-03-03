@@ -71,7 +71,9 @@ const Preferences = () => {
     try {
       await updateUserAgain(token, username, selectedCategory);
       showToast("username and preference set successfully","success");
-      navigate("/login");
+      setTimeout(() => {
+        navigate("/login"); // Redirect to login page after toast is displayed
+      }, 2000);
     } catch (error) {
       showToast("Failed to update user. Please try again.","error");
     }

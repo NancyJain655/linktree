@@ -1,5 +1,5 @@
 .sidebar {
-    width: 18rem;
+    width: 16rem;
     background: white;
     
     display: flex;
@@ -69,12 +69,11 @@ color:#676767;
     font-weight: bold;
 }
 
-.menuItem.active {
-    background: #f4f4f4; /* Light grey background */
+.menuItem.active {/* Light grey background */
     overflow: hidden; /* Ensure no extra spacing breaks the radius */
    
     background-color: #e1e1e1;
-    color: #28A263;
+ color: #28A263;
 }
 .italicText {
     font-style: italic;

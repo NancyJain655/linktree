@@ -7,6 +7,7 @@ import Links from "./pages/Links";
 import Settings from "./pages/Settings";
 import Appearance from "./pages/Appearance";
 import Analytics from "./pages/Analytics";
+import Frame from "./pages/Frame";
 import "./App.css";
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/appearance" element={<Appearance />} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/frame/:id" element={<Frame />} />
       </Routes>
     </Router>
   );
