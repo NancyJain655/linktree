@@ -1,11 +1,25 @@
+const themeNames = [
+  "Air Snow",
+  "Air Grey",
+  "Air Smoke",
+  "Air Black",
+  "Mineral Blue",
+  "Mineral Green",
+  "Mineral Orange",
+];
 const stylesArray = [
     {
       name: "stack",
       styles: {
         display: "flex",
         flexDirection: "column",
+        justifyContent:"center",
+        marginBottom:"5px",
         gap: "1rem",
         overflowY: "auto",
+        top:"10px",
+        width:"90%",
+        height:"90%",
       },
     },
     {
@@ -13,9 +27,15 @@ const stylesArray = [
       styles: {
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
+        width:"40%",
+        height:"40%",
         gap: "1rem",
+        justifyContent:"flex-start",
         overflowY: "auto",
+        left:"30px",
+        right:"30px",
       },
+     
     },
     {
       name: "carousel",
@@ -24,11 +44,15 @@ const stylesArray = [
         flexDirection: "row",
         gap: "1rem",
         overflowX: "auto",
-        maxWidth: "38%",
+        overflowY:"auto",
+        marginLeft: "30px" ,
+        paddingRight: "auto" ,
+      
       },
     },
     ...[1, 2, 3, 4, 5, 6, 7].map((num) => ({
       name: `Themecont${num}`,
+      displayName: themeNames[num - 1],
       styles: {
         height: "12rem",
         border: "1px solid #E0E2D9",
@@ -49,8 +73,6 @@ const stylesArray = [
     ...[1, 2, 3].map((num) => ({
       name: `colopatlet${num}`,
       styles: {
-        width: "9rem",
-        height: "2rem",
         border: num === 3 ? "2px solid #F3F3F1" : "none",
         backgroundColor: "black",
         borderRadius: num === 2 ? "0.5rem" : num === 3 ? "1rem" : "0",
@@ -59,8 +81,7 @@ const stylesArray = [
     ...[4, 5, 6].map((num) => ({
       name: `colopatlet${num}`,
       styles: {
-        width: "9rem",
-        height: "2rem",
+        
         border: "1px solid black",
         backgroundColor: "#f3f4f6",
         borderRadius: num === 5 ? "0.5rem" : num === 6 ? "1rem" : "0",
@@ -69,19 +90,17 @@ const stylesArray = [
     ...[7, 8, 9].map((num) => ({
       name: `colopatlet${num}`,
       styles: {
-        width: "9rem",
-        height: "2rem",
+        
         border: "1px solid black",
         backgroundColor: "#f3f4f6",
-        boxShadow: "6px 6px 0px rgba(0, 0, 0, 1)",
+       // boxShadow: "6px 6px 0px rgba(0, 0, 0, 1)",
         borderRadius: num === 8 ? "0.5rem" : num === 9 ? "1rem" : "0",
       },
     })),
     ...[10, 11, 12].map((num) => ({
       name: `colopatlet${num}`,
       styles: {
-        width: "9rem",
-        height: "2rem",
+    
         border: "none",
         backgroundColor: "#f3f4f6",
         boxShadow: "6px 6px 12px rgba(0, 0, 0, 0.3)",
@@ -91,8 +110,7 @@ const stylesArray = [
     {
       name: "colopatlet13",
       styles: {
-        width: "9rem",
-        height: "2rem",
+        
         backgroundColor: "black",
         clipPath:
           "polygon(0% 10%, 5% 0%, 10% 8%, 15% 2%, 20% 6%, 25% 0%, 30% 6%, 35% 2%, 40% 10%, 45% 4%, 50% 6%, 55% 2%, 60% 10%, 65% 0%, 70% 8%, 75% 2%, 80% 6%, 85% 0%, 90% 8%, 95% 2%, 100% 10%, 100% 90%, 95% 100%, 90% 92%, 85% 100%, 80% 94%, 75% 100%, 70% 92%, 65% 100%, 60% 94%, 55% 100%, 50% 92%, 45% 100%, 40% 94%, 35% 100%, 30% 92%, 25% 100%, 20% 94%, 15% 100%, 10% 92%, 5% 100%, 0% 90%)",
@@ -101,8 +119,7 @@ const stylesArray = [
     {
       name: "colopatlet14",
       styles: {
-        width: "9rem",
-        height: "2rem",
+        
         backgroundColor: "black",
         border: "none",
         color: "white",
@@ -113,8 +130,7 @@ const stylesArray = [
     {
       name: "colopatlet15",
       styles: {
-        width: "9rem",
-        height: "2rem",
+       
         border: "1px solid black",
         position: "relative",
       },
@@ -122,8 +138,7 @@ const stylesArray = [
     {
       name: "colopatlet16",
       styles: {
-        width: "9rem",
-        height: "2rem",
+        
         backgroundColor: "black",
         color: "white",
         borderRadius: "20px",
@@ -133,16 +148,14 @@ const stylesArray = [
     {
       name: "colopatlet17",
       styles: {
-        width: "9rem",
-        height: "2px",
+        
         position: "relative",
       },
     },
     {
       name: "colopatlet18",
       styles: {
-        width: "9rem",
-        height: "2rem",
+       
         backgroundColor: "black",
         color: "white",
         borderRadius: "20px 0px 0px 20px",

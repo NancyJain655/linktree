@@ -3,7 +3,8 @@ import styles from "./Settings.module.css";
 import Sidebar from "../components/Sidebar";
 import Main from "../components/Main";
 import { updateUser } from "../utils/apis/auth";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Settings = () => {
   const [user, setUser] = useState({
     firstName: "",
@@ -15,6 +16,25 @@ const Settings = () => {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+   const showToast = (message, type = "success") => {
+          toast(message, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            style: {
+      background: type === "success" ? "green" : "red",  // 🔥 Custom background
+      color: "white",  // ✅ Text color white
+      fontWeight: "bold", // Optional: Makes text bold
+      fontSize: "16px", // Optional: Adjust font size
+    },
+            type: type,
+          });
+        };
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -41,6 +61,7 @@ const Settings = () => {
 
     if (user.password !== user.confirmPassword) {
       setError("Passwords do not match");
+      showToast("Password do not match","error");
       return;
     }
 
@@ -56,6 +77,7 @@ const Settings = () => {
       const response = await updateUser(updatedData, token);
 
       setSuccess(response.message);
+      showToast("updated succesfully","success");
       localStorage.setItem("user", JSON.stringify(updatedData));
 
       // Trigger storage event manually to update Sidebar & Main
@@ -67,12 +89,14 @@ const Settings = () => {
         confirmPassword: "",
       }));
     } catch (err) {
+      showToast(" Error in updating profile","error");
       setError(err);
     }
   };
 
   return (
     <div className={styles.container}>
+      <ToastContainer/>
       <Sidebar />
       <div className={styles.content}>
         <Main />

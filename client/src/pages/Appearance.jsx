@@ -6,23 +6,56 @@ import grid from "../assets/icons/Group 1171274800.png";
 import Carousel from "../assets/icons/Group 1171274799.png";
 import stack from "../assets/icons/Group 1171274801.png";
 import styles from  "./Appearance.module.css";
+import shareFrame from "../assets/icons/shareFrame.png";
 import styleArray from "../components/array of style/styleArray";
 import axios from "axios";
-
+import { getUserData } from "../utils/apis/auth"; // Import update function
+import { getLinks } from "../utils/apis/link";
+import { getLayout } from "../utils/apis/layout";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Appearence = () => {
   const [selectedTab, setSelectedTab] = useState("Link");
   const [buttonColor, setButtonColor] = useState("#000000");
   const [buttonTextColor, setButtonTextColor] = useState("#FFFFFF");
   const [tempButtonColor, setTempButtonColor] = useState(buttonColor);
-  const [tempButtonTextColor, setTempButtonTextColor] =
-    useState(buttonTextColor);
-  const [selected, setSelected] = useState("colopatlet3");
+  const [tempButtonTextColor, setTempButtonTextColor] =useState(buttonTextColor);
   const [frameStyle, setFrameStyle] = useState(styleArray["colopatlet3"]);
-  const [selectedTheme, setSelectedTheme] = useState("Themecont1");
-  const [frameBgColor, setFrameBgColor] = useState("#ffffff");
-  const [selectedLayout, setSelectedLayout] = useState("stack");
+  const [selectedTheme, setSelectedTheme] = useState("");
+  const [selectedLayout, setSelectedLayout] = useState("");
   const [selectedFont, setSelectedFont] = useState("DM Sans");
+const [selectedButton, setSelectedButton] = useState(""); // Selected Button
+  const [links, setLinks] = useState([]);
+   const [username, setUsername] = useState("");
+  const [filteredLinks, setFilteredLinks] = useState([]);
+  const [selectedColor, setSelectedColor] = useState("#342B26"); // Default color
+  const [appearance,setAppearance]=useState();
 
+  const showToast = (message, type = "success") => {
+    toast[type](message, {
+      position: "top-center",
+      autoClose: false,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+     
+      progress: undefined,
+      closeButton: ({ closeToast }) => (
+        <button onClick={closeToast} style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}>
+          ❌
+        </button>
+      ),
+      style: {
+        background: type === "success" ? "green" : "red",  // 🔥 Custom background
+        color: "white",  // ✅ Text color white
+        fontWeight: "bold", // Optional: Makes text bold
+        fontSize: "16px", // Optional: Adjust font size
+      },
+    });
+    
+  };
+ 
   // Button groups
   const buttonGroups = [
     { label: "Fill", buttons: ["colopatlet1", "colopatlet2", "colopatlet3"] },
@@ -52,12 +85,14 @@ const Appearence = () => {
   ];
 
   const handleButtonClick = (button) => {
-    setSelected(button);
+    setSelectedButton(button);
     let style = {
       ...styleArray[button],
       backgroundColor: handleButtonColorChange,
       color: handleButtonTextColorChange,
       fontFamily: handleFontChange,
+      width:frameStyle?.width||"90%",
+      height:frameStyle?.height||"auto",
     };
     if (
       button.includes("colopatlet1") ||
@@ -70,6 +105,7 @@ const Appearence = () => {
         : button.includes("colopatlet2")
         ? "1rem"
         : "0rem";
+      
     }
     if (
       button.includes("colopatlet4") ||
@@ -143,8 +179,7 @@ const Appearence = () => {
 
   const handleButtonTextColorChange = (e) => {
     setButtonTextColor(e.target.value);
-    setTempButtonTextColor(e.target.value);
-    setFrameStyle((prevStyle) => ({ ...prevStyle, color: e.target.value }));
+    //setFrameStyle((prevStyle) => ({ ...prevStyle, color: e.target.value }));
   };
 
   const handleButtonTextChange = (e) => {
@@ -154,12 +189,28 @@ const Appearence = () => {
       setButtonColor(newText);
     }
   };
+useEffect(() => {
+     // ✅ Step 1: Check if this runs
+    const storedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    if (storedUser) {
+      const userObject = JSON.parse(storedUser);
+      setUsername(userObject.username);
+    }
+});
 
-  const handleButtonFontTextChange = (e) => {
-    const newText = e.target.value;
-    setTempButtonTextColor(newText);
-    if (/^#([0-9A-F]{6})$/i.test(newText)) {
-      setButtonTextColor(newText);
+
+  const handleLayoutChange = (layout) => {
+
+  
+    const selectedStyle = styleArray.find((item) => item.name === layout);
+  
+    if (selectedStyle) {
+      setSelectedLayout(layout); // ✅ Store selected layout name
+      setFrameStyle(selectedStyle.styles); // ✅ Apply the correct style object
+      console.log("Updated Frame Style:", selectedStyle.styles);
+    } else {
+      console.error("Invalid layout selected:", layout);
     }
   };
 
@@ -177,66 +228,140 @@ const Appearence = () => {
       fontFamily: e.target.value,
     }));
   };
-  const handleThemeChange = (themeClass) => {
-    setSelectedTheme(themeClass);
-    const themeElement = document.querySelector(`.${themeClass}`);
-    if (themeElement) {
-      const computedStyle = window.getComputedStyle(themeElement);
-      setFrameBgColor(computedStyle.backgroundColor);
+  useEffect(() => {
+    const fetchLayout = async () => {
+      const token = localStorage.getItem("token"); // Assuming token is stored in localStorage
+      if (!token) return;
+
+      const appearance = await getLayout(token);
+      showToast("Theme updated successfully","success")
+      if (appearance ) {
+        setAppearance(appearance);
+      }
+    };
+
+    fetchLayout();
+  }, []);
+  const handleThemeChange = (themeName) => {
+   
+  
+    const selectedThemeObj = styleArray.find((style) => style.name === themeName);
+  
+    if (selectedThemeObj) {
+   
+  
+      if (selectedThemeObj.styles.backgroundColor) {
+        setSelectedTheme(selectedThemeObj.styles.backgroundColor);
+        
+      } else {
+        console.warn("No background color found for this theme.");
+      }
+    } else {
+      console.warn("Theme not found in stylesArray.");
     }
   };
   const themeMapping = {
    "Air Snow":"Themecont1" ,
-    "Air Gray":"Themecont2" ,
+    "Air Grey":"Themecont2" ,
    "Air Smoke" : "Themecont3",
     "Air Black": "Themecont4",
     "Mineral Blue" :"Themecont5",
    "Mineral Green": "Themecont6",
     "Mineral Orange": "Themecont7",
   };
+  const fetchUserData = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await getUserData(token); // API call to fetch latest user data
+       
+        setSelectedColor(response.backColor);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
   const handleSaveAppearance = async () => {
-    
+    console.log("Selected Theme:", selectedTheme);
+    console.log("Theme Mapping:", themeMapping);
+    console.log("Mapped Theme:", themeMapping[selectedTheme]);
+    console.log("Selected Layout:", selectedLayout);
 
     const appearanceData = {
-      layout: selectedLayout,
-      button: selected,
+      layout:selectedLayout,
+      button: selectedButton,
       button_text: buttonTextColor,
       font: selectedFont,
       fontcolor: buttonTextColor,
-      themes: themeMapping[selectedTheme] || "Air Snow", // ✅ Ensure a valid value
+      themes:selectedTheme, // ✅ Ensure a valid value
     };
+    console.log(appearanceData);
+    try {
+      const token = localStorage.getItem("token"); // Get token from storage
+      const response = await axios.put(
+        `${import.meta.env.VITE_BASEURL}/api/layout/appearance`,
+        appearanceData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-    // try {
-    //   const token = localStorage.getItem("token"); // Get token from storage
-    //   const response = await axios.put(
-    //     `${import.meta.env.VITE_BACKEND_URL}/api/appearance`,
-    //     appearanceData,
-    //     {
-    //       headers: { Authorization: `Bearer ${token}` },
-    //     }
-    //   );
-
-    //   console.log("Appearance updated:", response.data);
-    // } catch (error) {
-    //   console.error("Error updating appearance:", error);
-    // }
+      console.log("Appearance updated:", response.data);
+    } catch (error) {
+      console.error("Error updating appearance:", error);
+    }
   };
 
+
+  useEffect(() => {
+    const token=localStorage.getItem("token");
+    const fetchLinks = async () => {
+      try {
+                  const fetchedLinks = await getLinks(token);
+                  console.log("Fetched Links from API:", fetchedLinks);
+      
+                  if (Array.isArray(fetchedLinks)) {
+                    setLinks(fetchedLinks);
+                    console.log("Links state after setting:", links);
+      
+                  } else {
+                    console.error("API returned invalid format:", fetchedLinks);
+                  }
+                } catch (error) {
+                  console.error("Error fetching links:", error);
+                }
+    };
+
+    fetchLinks();
+  }, []);
+
+  useEffect(() => {
+     
+      const filtered = links.filter((link) => link.type?.toLowerCase() === selectedTab.toLowerCase());
+      setFilteredLinks(filtered);
+    }, [selectedTab, links]);
+   useEffect(() => {
+       fetchUserData();
+     }, []);
+  // Filter links based on the selected tab
+  
   return (
     <div className={styles.container}>
+     
     <Sidebar />
     <div className={styles.mainContent}>
       <Main />
       <div className={styles.contentWrapper}>
         <div className={styles.frameSection} style={{ paddingTop: "2rem" }}>
-                    <div className={styles.frame}>
-                      <div className={styles.frameUsername} >
+                    <div className={styles.frame} style={{ backgroundColor: selectedTheme|| appearance?.themes }}>
+                      <div className={styles.frameUsername} style={{ backgroundColor: selectedColor }}>
+                      <button className={styles.shareButton} >
+        <img src={shareFrame} alt="Share" className={styles.shareFrame} />
+      </button>
                         <img
                           src="https://www.w3schools.com/howto/img_avatar.png"
                           alt="User Avatar"
                           className={styles.frameImg}
                         />
-                        <h2>tester</h2>
+                        <h2>{username}</h2>
                       </div>
                       <div className={styles.frameButtons}>
                         <button
@@ -252,20 +377,19 @@ const Appearence = () => {
                           Shop
                         </button>
                       </div>
-                      <div className={styles.content1}>
-                      {selectedTab === "Link" ? (
-                  <div className={styles.frameLinks}>
-                    {["Latest YouTube Video", "Latest Instagram Reel", "Latest YouTube Video", "Latest Instagram Reel"].map(
-                      (item, index) => (
-                        <div key={index} className={styles.frameLink}>
-                          <span className={styles.frameIcon}></span>
-                          <span>{item}</span>
-                        </div>
-                      )
-                    )}
+                      <div className={styles.content1} >
+
+{filteredLinks.length > 0 ? (
+                  <div className={`${styles.frameLinks}`}style={frameStyle}>
+                    {filteredLinks.map((item, index) => (
+                      <div key={index} className={`${styles.frameLink} ${styles[selectedButton]}`} >
+                        <span className={styles.frameIcon}></span>
+                        <span>{item.title}</span> {/* Display the link name */}
+                      </div>
+                    ))}
                   </div>
                 ) : (
-                  <p>Showing Shop Content</p>
+                  <p>No links available</p>
                 )}
                       </div>
                       <button className={styles.getConnected}>Get Connected</button>
@@ -279,15 +403,18 @@ const Appearence = () => {
         <label className={styles.nameOfLay}>Layout</label>
         <div className={styles.layoutButtons}>
           <button className={styles.layoutBtn}>
-            <img className={styles.layoutImg} src={stack} />
+            <img  src={stack} className={`${styles.layoutImg} ${selectedLayout === "stack" ? styles.selected : ""}`}
+  onClick={() => handleLayoutChange("stack")}/>
             Stack
           </button>
-          <button className={styles.layoutBtn}>
-            <img className={styles.layoutImg} src={grid} />
+          <button  className={styles.layoutBtn} >
+            <img  src={grid} className={`${styles.layoutImg} ${selectedLayout === "grid" ? styles.selected : ""}`}
+  onClick={() => handleLayoutChange("grid")} />
             Grid
           </button>
-          <button className={styles.layoutBtn}>
-            <img className={styles.layoutImg} src={Carousel} />
+          <button className={styles.layoutBtn} >
+            <img  src={Carousel} className={`${styles.layoutImg} ${selectedLayout === "carousel" ? styles.selected : ""}`}
+  onClick={() => handleLayoutChange("carousel")}/>
             Carousel
           </button>
         </div>
@@ -315,9 +442,7 @@ const Appearence = () => {
                 {group.buttons.map((button) => (
                   <button
                     key={button}
-                    className={`${styles[button]} ${
-                      selected === button ? styles.selected : ""
-                    }`}
+                     className={`${styles[button]} ${selectedButton === button ? styles.selected : ""}`}
                     onClick={() => handleButtonClick(button)}
                   >
                     {button.includes("colopatlet") ? "" : ""}
@@ -420,23 +545,30 @@ const Appearence = () => {
 
       {/* Themes Section */}
       <div className={styles.themesCont}>
-        <label className={styles.nameOfLay}>Themes</label>
-        <div className={styles.themesDisplay}>
-          {Object.entries(themeMapping).map(([themeName, themeClass]) => (
-            <div className={styles.buttonOfTheme} key={themeClass}>
-              <button
-               className={`${styles[themeClass]} ${
-                selectedTheme === themeClass ? styles.selectedTheme : ""
-              }`}
-                onClick={() => handleThemeChange(themeClass)}
-              >
-                <span>&#9776;</span>
-              </button>
-              <span className={styles.airg}>{themeName}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+  <label className={styles.nameOfLay}>Themes</label>
+  <div className={styles.themesDisplay}>
+  {styleArray
+  .filter((theme) => theme.name.startsWith("Themecont"))
+  .map((theme) => (
+    <div className={styles.buttonOfTheme} key={theme.name}>
+      <button
+        className={`${styles[theme.name]} ${
+          selectedTheme === theme.name ? styles.selectedTheme : ""
+        }`}
+        onClick={() => handleThemeChange(theme.name)}
+      >
+        <span>&#9776;</span>
+      </button>
+      
+      <span className={styles.airg}>{theme.displayName}</span>
+      
+    </div>
+   
+  )) }
+ 
+  </div>
+ 
+</div>
 
       {/* Save Button */}
       <div className={styles.saveStyleCont}>
@@ -447,6 +579,7 @@ const Appearence = () => {
     </div>
       </div>
     </div>
+    <ToastContainer/>
   </div>
   );
 };

@@ -4,6 +4,8 @@ import styles from "./Signup.module.css";
 import logo from "../assets/logo.png";
 import signupImage from "../assets/login-image.png";
 import { registerUser } from "../utils/apis/auth";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -16,6 +18,24 @@ const Signup = () => {
     termsChecked: false,
   });
 
+  const showToast = (message, type = "success") => {
+            toast(message, {
+              position: "top-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: falsr,
+              draggable: true,
+              progress: undefined,
+              style: {
+                background: type === "success" ? "green" : "red",  // 🔥 Custom background
+                color: "white",  // ✅ Text color white
+                fontWeight: "bold", // Optional: Makes text bold
+                fontSize: "16px", // Optional: Adjust font size
+              },
+              type: type,
+            });
+          };
   const [formErrors, setFormErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -86,11 +106,12 @@ const Signup = () => {
       if (response.token) {
         localStorage.setItem("token", response.token); // Store token in localStorage
   
-        if (localStorage.getItem("token")) { // Check if token is actually stored
+        if (localStorage.getItem("token")) { 
+          showToast("User successfully registered","success");// Check if token is actually stored
           navigate("/preferences"); // Redirect only if token is present
         }
       } else {
-        alert(response.msg); // Show error message if no token is returned
+        showToast("something went wrong","error");// Show error message if no token is returned
       }
     } catch (err) {
       setFormErrors({ ...formErrors, general: err.msg || "The password is incorrect." });
@@ -103,6 +124,7 @@ const Signup = () => {
 
   return (
     <div className={styles.container}>
+      <ToastContainer/>
       <div className={styles.leftSection}>
         <img src={logo} alt="Spark Logo" className={styles.logo} />
         <h2 className={styles.title}>Sign up to your Spark</h2>

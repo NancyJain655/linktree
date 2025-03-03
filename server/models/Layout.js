@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const layoutschema = new mongoose.Schema({
   layout: {
     type: String,
-    enum: ["stack", "grid", "corousel"],
   },
   button: {
     fill: {
@@ -40,15 +39,6 @@ const layoutschema = new mongoose.Schema({
   },
   themes: {
     type: String,
-    enum: [
-      "white",
-      "#E0E2D9",
-      "#272d2f",
-      "black",
-      "#e4f5fe",
-      "#e5f9ef",
-      "#fcefe3",
-    ],
   },
 
   user: {

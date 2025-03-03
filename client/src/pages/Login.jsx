@@ -6,6 +6,8 @@ import loginImage from "../assets/login-image.png";
 import disappear from "../assets/disappear.png";
 import showpass from "../assets/showpass.png";
 import { loginUser } from "../utils/apis/auth"; // Import API function
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,6 +15,27 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+
+  const showToast = (message, type = "success") => {
+      toast(message, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        style: {
+          background: type === "success" ? "green" : "red",  // 🔥 Custom background
+          color: "white",  // ✅ Text color white
+          fontWeight: "bold", // Optional: Makes text bold
+          fontSize: "16px", // Optional: Adjust font size
+        },
+        type: type,
+      });
+    };
+
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -26,16 +49,20 @@ const Login = () => {
       // Store token in local storage
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-
+      showToast("User logged in sccessfully","success")
       // Redirect to links page
-      navigate("/links");
+      setTimeout(() => {
+        navigate("/links"); // Redirect to login page after toast is displayed
+      }, 2000);
     } catch (err) {
+      showToast("Something went wrong","error")
       setError(err); // Show error message
     }
   };
 
   return (
     <div className={styles.container}>
+      <ToastContainer/>
       <div className={styles.leftSection}>
         <img src={logo} alt="Spark Logo" className={styles.logo} />
         <h2 className={styles.title}>Sign in to your Spark</h2>

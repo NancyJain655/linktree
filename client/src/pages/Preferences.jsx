@@ -3,12 +3,32 @@ import styles from "./Preferences.module.css";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { updateUserAgain } from "../utils/apis/auth"; // Import API function
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Preferences = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [username, setUsername] = useState(""); // Store username input
   const [selectedCategory, setSelectedCategory] = useState(null);
+
+  const showToast = (message, type = "success") => {
+        toast(message, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          style: {
+            background: type === "success" ? "green" : "red",  // 🔥 Custom background
+            color: "white",  // ✅ Text color white
+            fontWeight: "bold", // Optional: Makes text bold
+            fontSize: "16px", // Optional: Adjust font size
+          },
+          type: type,
+        });
+      };
 
   const categories = [
     { id: "Business", name: "Business", icon: "🏢" },
@@ -31,26 +51,29 @@ const Preferences = () => {
       navigate("/login");
     } else {
       setIsAuthenticated(true);
+
     }
   }, [navigate]);
 
   const handleUpdate = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
+      showToast("No token,Log in again","error")
       navigate("/login");
       return;
     }
 
     if (!selectedCategory || !username.trim()) {
-      alert("Please enter a username and select a category.");
+      showToast("Please enter a username and select a category.","error");
       return;
     }
 
     try {
       await updateUserAgain(token, username, selectedCategory);
+      showToast("username and preference set successfully","success");
       navigate("/login");
     } catch (error) {
-      alert("Failed to update user. Please try again.");
+      showToast("Failed to update user. Please try again.","error");
     }
   };
 
@@ -60,6 +83,7 @@ const Preferences = () => {
 
   return (
     <div className={styles.container}>
+      <ToastContainer/>
       <div className={styles.leftSection}>
         <img src={logo} alt="Spark Logo" className={styles.logo} />
         <div className={styles.contentWrapper}>

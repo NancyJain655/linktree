@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styles from "../styles/Modal.module.css";
-import { createLink } from "../utils/apis/link"; // Import the API function
+import { createLink } from "../utils/apis/link";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import instagramIcon from "../assets/icons/instagram.png";
 import facebookIcon from "../assets/icons/facebook.png";
@@ -14,12 +16,11 @@ import meeshoIcon from "../assets/icons/meesho.png";
 import myntraIcon from "../assets/icons/myntra.png";
 
 const Modal = ({ onClose, selectedTab: initialTab }) => {
-  const [selectedTab, setSelectedTab] = useState(initialTab); // Internal state for tab switching
-  const [title, setTitle] = useState(""); // Link title state
-  const [url, setUrl] = useState(""); // Link URL state
+  const [selectedTab, setSelectedTab] = useState(initialTab);
+  const [title, setTitle] = useState("");
+  const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Define application lists for both tabs
   const linkApps = [
     { name: "Instagram", icon: instagramIcon },
     { name: "Facebook", icon: facebookIcon },
@@ -40,38 +41,63 @@ const Modal = ({ onClose, selectedTab: initialTab }) => {
     }
   };
 
-  // Handle toggle switch click -> Save link
+  const showToast = (message, type = "success") => {
+    toast(message, {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      style: {
+        background: type === "success" ? "green" : "red",
+        color: "white",
+        fontWeight: "bold",
+        fontSize: "16px",
+      },
+      type: type,
+    });
+  };
 
   const handleToggle = async (event) => {
-    const isActive = event.target.checked; // Get the toggle switch state
-    
-    if (!isActive) {
-      return; // Do nothing if the toggle is turned off
-    }
-  
+    const isActive = event.target.checked;
+
+    if (!isActive) return;
+
     const type = selectedTab === "Link" ? "link" : "shop";
-  
+
     if (!title || !url) {
-      alert("Title and URL are required");
+      showToast("Title and URL are required", "error");
       return;
     }
-  
-    console.log("Submitting:", { type, title, url }); // Debugging
-  
+
     try {
       await createLink(type, title, url);
-      alert("Link created successfully!");
-      onClose(); // Close modal on success
+      showToast("Link created successfully!", "success");
+      onClose();
     } catch (error) {
-      alert(error.response?.data?.message || "Failed to create link");
+      showToast(error.response?.data?.message || "Failed to create link", "error");
     }
   };
-  
-  
- 
+
+  const handleCopyUrl = () => {
+    if (!url) {
+      showToast("No URL to copy", "error");
+      return;
+    }
+    navigator.clipboard.writeText(url);
+    showToast("URL copied to clipboard!", "success");
+  };
+
+  const handleDeleteUrl = () => {
+    setUrl("");
+    showToast("URL cleared!", "success");
+  };
 
   return (
     <div className={styles.modalOverlay} onClick={handleBackgroundClick}>
+      <ToastContainer />
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
           <div className={styles.frameButtons}>
@@ -93,48 +119,45 @@ const Modal = ({ onClose, selectedTab: initialTab }) => {
         <div className={styles.body}>
           <label className={styles.title}>Enter URL</label>
 
-          {/* Link Title & Toggle Switch */}
           <div className={styles.row}>
             <div className={styles.inputGroup}>
-            <input
-  type="text"
-  placeholder="Link title"
-  className={styles.input}
-  value={title}
-  onChange={(e) => setTitle(e.target.value)}
-/>
+              <input
+                type="text"
+                placeholder="Link title"
+                className={styles.input}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
             </div>
             <div className={styles.toggleSwitch}>
               <input
                 type="checkbox"
                 id="toggle"
-                onChange={handleToggle} // API call when toggled
+                onChange={handleToggle}
                 disabled={isLoading}
               />
               <label htmlFor="toggle"></label>
             </div>
           </div>
 
-          {/* Link URL & Icons */}
           <div className={styles.row}>
             <div className={styles.inputGroup}>
-            <input
-  type="text"
-  placeholder="Link URL"
-  className={styles.input}
-  value={url}
-  onChange={(e) => setUrl(e.target.value)}
-/>
+              <input
+                type="text"
+                placeholder="Link URL"
+                className={styles.input}
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+              />
             </div>
             <div className={styles.iconButtons}>
-              <img src={copy} alt="Copy" className={styles.iconImage} />
-              <img src={deleteIcon} alt="Delete" className={styles.iconImage} />
+              <img src={copy} alt="Copy" className={styles.iconImage} onClick={handleCopyUrl} />
+              <img src={deleteIcon} alt="Delete" className={styles.iconImage} onClick={handleDeleteUrl} />
             </div>
           </div>
 
-          <hr className={styles.separator} /> {/* Grey horizontal line */}
+          <hr className={styles.separator} />
 
-          {/* Applications Section */}
           <label className={styles.title}>Applications</label>
           <div className={styles.applications}>
             {(selectedTab === "Link" ? linkApps : shopApps).map((app, index) => (

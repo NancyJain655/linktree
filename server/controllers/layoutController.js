@@ -19,6 +19,7 @@ const getLayout=async (req,res)=>{
 };
 const updateLayout=async (req,res)=>{
     const { layout, button, button_text, font, fontcolor, themes } = req.body;
+    console.log(req.body);
   const userId = req.user.id;
 
   try {

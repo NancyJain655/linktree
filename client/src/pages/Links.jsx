@@ -8,6 +8,9 @@ import IconFire from "../assets/icons/FireGrey.png";
 import Modal from "../components/Modal"; // ✅ Import Modal
 import { getLinks } from "../utils/apis/link";
 import stats from "../assets/icons/stats.png";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 import deleteIcon from "../assets/icons/deleteIcon.png";
 import edit from "../assets/icons/edit.png";
@@ -24,23 +27,40 @@ function Links() {
   const [selectedColor, setSelectedColor] = useState("#342B26"); // Default color
   const [bio, setBio] = useState("Bio"); // Bio state
   
-
+  const showToast = (message, type = "success") => {
+    toast(message, {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      style: {
+        background: type === "success" ? "green" : "red",  // 🔥 Custom background
+        color: "white",  // ✅ Text color white
+        fontWeight: "bold", // Optional: Makes text bold
+        fontSize: "16px", // Optional: Adjust font size
+      },
+      type: type,
+    });
+  };
 
   const colors = ["#342B26", "#FFFFFF", "#000000"];
   
   const handleDelete = async (id) => {
     const token = localStorage.getItem("token");
     if (!token) {
-      console.error("No token found, cannot delete link.");
+      showToast("No token found, cannot delete link.", "error");
       return;
     }
   
     try {
       await deleteLink(id, token);
       setLinks((prevLinks) => prevLinks.filter((link) => link._id !== id)); // Remove deleted link from state
-      console.log("Link deleted successfully");
+      showToast("Link deleted successfully!", "success");
     } catch (error) {
-      console.error("Failed to delete link:", error);
+      showToast("Failed to delete link!", "error");
     }
   };
   const handleSave = async () => {
@@ -53,11 +73,11 @@ function Links() {
     try {
       const response = await updateProfile(bio, selectedColor, token);
       console.log("Profile updated successfully:", response);
-      alert("Profile updated successfully!"); // Show success message
+      showToast("Profile updated successfully!","success"); // Show success message
       fetchUserData();
     } catch (error) {
       console.error("Failed to update profile:", error);
-      alert("Failed to update profile!");
+      showToast("Failed to update profile!","error");
     }
   };
   const fetchUserData = async () => {
@@ -66,6 +86,7 @@ function Links() {
       const response = await getUserData(token); // API call to fetch latest user data
       setBio(response.Bio);
       setSelectedColor(response.backColor);
+      setUsername(response.username);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -74,12 +95,13 @@ function Links() {
   useEffect(() => {
     console.log("useEffect is running..."); // ✅ Step 1: Check if this runs
     const storedUser = localStorage.getItem("user");
+    console.log(storedUser);
     const token = localStorage.getItem("token");
     console.log("Stored User from LocalStorage:", storedUser); // ✅ Step 2: Check if user is found
     if (storedUser) {
       const userObject = JSON.parse(storedUser);
       console.log("Parsed User Object:", userObject);
-      setUsername(userObject.username);
+      
 
       const fetchLinks = async () => {
         if (token) {
@@ -115,6 +137,7 @@ function Links() {
 
   return (
     <div className={styles.container}>
+       <ToastContainer />
       <Sidebar />
       <div className={styles.mainContent}>
         <Main />

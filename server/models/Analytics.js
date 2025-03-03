@@ -20,7 +20,7 @@ const AnalyticsSchema = new mongoose.Schema(
             default: "direct",
         },
     },
-    { timestamps: true }
+    { timestamps: true }      
 );
 
 const Analytics = mongoose.model("Analytics", AnalyticsSchema);

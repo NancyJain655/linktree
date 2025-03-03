@@ -3,10 +3,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: sans-serif;
+    overflow: hidden;
+
 }
-::-webkit-scrollbar {
-    display: none;
+#root{
+    overflow: hidden;
 }
 .mainContent {
     flex: 1;
@@ -20,11 +21,12 @@
     grid-template-columns: 0.1fr 1fr;
     height: 100vh;
     background-color: #e1e1e1;
+    overflow: hidden;
 }
 .contentWrapper{
     display: grid;
     grid-template-columns: 0.7fr 1fr;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .frame{
@@ -38,6 +40,7 @@
     border: 1rem solid black;
     border-radius: 3rem;
     position: relative;
+    overflow-y: auto;
 }
 .customFileUpload {
     font-size: 0.8rem;
@@ -85,7 +88,7 @@
     border-radius: 2rem;
     align-items: center;
     justify-content: center;
-    margin-bottom: .7rem;
+    margin-bottom: .3rem;
   }
   .tabBtn {
     width: 47%;
@@ -174,7 +177,7 @@
     transition: background 0.3s;
     border-radius: 3rem;
     margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
 }
   .customFileUpload input {
     display: none;

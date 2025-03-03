@@ -36,7 +36,7 @@ const trackLinkClick = async (req, res) => {
 
 const getAnalytics = async (req, res) => {
     try {
-        const links = await Link.find({ user: req.user._id }).select("_id title");
+        const links = await Link.find({ user: req.user.id }).select("_id title");
 
         const analyticsData = await Promise.all(
             links.map(async (link) => {
