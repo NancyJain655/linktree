@@ -11,16 +11,18 @@ const AnalyticsSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        
         device: {
             type: String,
             required: true,
         },
-        referrer: {
+        referrer: {  
             type: String,
             default: "direct",
         },
+        timestamp: { type: Date, default: Date.now },
     },
-    { timestamps: true }      
+         
 );
 
 const Analytics = mongoose.model("Analytics", AnalyticsSchema);

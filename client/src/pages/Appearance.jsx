@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Main from "../components/Main";
 import styles from "./Appearance.module.css";
@@ -179,7 +179,7 @@ const Appearance = () => {
             ]
         }
     ]
-
+   
     const themeMap = [
         {
             'air-snow': '#ffeee2',
@@ -301,7 +301,7 @@ const Appearance = () => {
             headers: {
                 Authorization: `Bearer ${token}`, // Include token in request
             },
-            withCredentials: true, // Allow credentials
+           
         })
             .then((res) => {
                 console.log('res', res)
@@ -329,12 +329,12 @@ const Appearance = () => {
     useEffect(()=>{
      const fetchUserData = async () => {
         const token = localStorage.getItem("token");
+        
         try {
-          const response = await getUserData(token); // API call to fetch latest user data
-         console.log(response.backColor);
+          const response = await getUserData(token);
+           // API call to fetch latest user dat
           setSelectedColor(response.backColor);
           setUsername(response.username);
-          setUserId(response.id);
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
@@ -363,7 +363,7 @@ const Appearance = () => {
                 headers: {
                     Authorization: `Bearer ${token}`, // Include token in request
                 },
-                withCredentials: true, // Allow credentials
+               
             })
                 .then((res) => {
                     console.log('res', res)
@@ -387,7 +387,7 @@ const Appearance = () => {
                 headers: {
                     Authorization: `Bearer ${token}`, // Include token in request
                 },
-                withCredentials: true, // Allow credentials
+               
             })
                 .then((res) => {
                     console.log('res', res)
@@ -397,15 +397,34 @@ const Appearance = () => {
                 })
         }
     }
-    const shareableLink = userId ? `https://linktree-tan-one.vercel.app/frame/${userId}` : "";
-
+    
   // Copy to Clipboard
   const handleShare = () => {
+    const user = localStorage.getItem('user');
+            const parsedData = JSON.parse(user);
+            const uid=parsedData.id;
+    const shareableLink = uid ? `https://linktree-tan-one.vercel.app/frame/${uid}` : "";
+     console.log(shareableLink);
     if (shareableLink) {
-      navigator.clipboard.writeText(shareableLink).then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000); // Hide after 2 seconds
-      });
+      navigator.clipboard.writeText(shareableLink);
+    }
+  };
+  const trackLinkClick = async (event,linkId) => {
+    event.preventDefault();
+    try {
+      // Send request to backend to track click
+       const response = await axios.get(baseUrl+'/api/analytics/'+linkId);
+      if (response.status === 200) {
+      console.log('Link click tracked');
+      // Redirect after tracking
+     
+        const link = links.find(link => link._id === linkId);
+        if (link && link.url) {
+          window.location.href = link.url; // Redirect to the actual URL after delay
+        }
+      }
+    } catch (error) {
+      console.error('Error tracking link click:', error);
     }
   };
 
@@ -469,6 +488,7 @@ const Appearance = () => {
                               href={link.url}  // Ensure this contains a valid URL
                              target="_blank"  // Open in new tab
                          rel="noopener noreferrer" > 
+                         <div key={index} onClick={(event) => trackLinkClick(event,link._id)}>
                                                 <LinkButton
                                                     key={index}
                                                     img={dp}
@@ -479,13 +499,19 @@ const Appearance = () => {
                                                     color={appearanceData.fonts.color}
                                                     font={appearanceData.fonts.font}
                                                 />
+                                                </div>
                                                 </a>
                                             ))}
                                     </div>
                                 )}
 
                             </div>
-<button className={styles.getConnected}>Get Connected</button>
+<button className={styles.getConnected}><a 
+    href="https://linktree-tan-one.vercel.app/login" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    style={{ textDecoration: 'none', color: 'inherit' }}>
+  Get Connected </a></button>
               <div className={styles.lastLogo}><img src={lastlogo} alt="" /></div>
 
                         </div>

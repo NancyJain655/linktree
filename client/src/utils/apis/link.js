@@ -45,3 +45,11 @@ export const getLinks = async (token) => {
       throw error;
     }
   };
+  export const trackLinkClick = async (linkId) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/analytics/${linkId}`);
+      return response.data; // You can use this data if you need to handle something after the click
+    } catch (error) {
+      console.error('Error tracking link click:', error);
+    }
+  };

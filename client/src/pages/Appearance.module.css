@@ -27,7 +27,7 @@
 position: relative;
     height: 80vh;
     border-radius: 3rem;
-    overflow-y:scroll;
+    overflow:hidden;
 
 }
 
@@ -63,6 +63,8 @@ position: relative;
     gap: 1rem;
     padding: 1rem;
     align-items: center;
+    max-height: 40%;
+    overflow:auto;
 }
 
 .frameButtons {
@@ -103,7 +105,8 @@ position: relative;
     align-items: start;
     width: 100%;
     height:100%;
-    overflow-y: scroll;
+    /*overflow-y: auto;*/
+    
 }
 
 .connectBtn {
@@ -270,11 +273,13 @@ position: relative;
     transition: background 0.3s;
     border-radius: 3rem;
     margin-top: 1rem;
-    margin-bottom: 3rem;
+    bottom: 3rem;
+    position:absolute;
+    
 }
 .lastLogo{
     position: absolute;
-    bottom: -5rem;
+    bottom: 0rem;
     
     img{
         width: 8rem;
@@ -301,15 +306,18 @@ position: relative;
     flex-shrink: 0; /* Prevents independent scrolling */
     overflow: visible; /* Ensures no individual scrolling */
 }
-.stack > * {
+
+/* .grid > * {
     overflow-y: scroll !important;
-}
-.grid > * {
+}.stack > * {
     overflow-y: scroll !important;
 }
 .carousal > * {
     overflow-x:scroll !important;
-}
+} */
+ .frameContent{
+    overflow-y:auto !important;
+ }
 .shareBtn {
     position: absolute;
     top: 10px;

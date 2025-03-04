@@ -22,17 +22,17 @@ const Modal = ({ onClose, selectedTab: initialTab }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const linkApps = [
-    { name: "Instagram", icon: instagramIcon },
-    { name: "Facebook", icon: facebookIcon },
-    { name: "YouTube", icon: youtubeIcon },
-    { name: "X", icon: xIcon },
+    { name: "Instagram", icon: instagramIcon, url: "https://www.instagram.com/" },
+    { name: "Facebook", icon: facebookIcon, url: "https://www.facebook.com/" },
+    { name: "YouTube", icon: youtubeIcon, url: "https://www.youtube.com/" },
+    { name: "X", icon: xIcon, url: "https://www.x.com/" },
   ];
 
   const shopApps = [
-    { name: "Flipkart", icon: flipkartIcon },
-    { name: "Amazon", icon: amazonIcon },
-    { name: "Meesho", icon: meeshoIcon },
-    { name: "Myntra", icon: myntraIcon },
+    { name: "Flipkart", icon: flipkartIcon, url: "https://www.flipkart.com/" },
+    { name: "Amazon", icon: amazonIcon, url: "https://www.amazon.com/" },
+    { name: "Meesho", icon: meeshoIcon, url: "https://www.meesho.com/" },
+    { name: "Myntra", icon: myntraIcon, url: "https://www.myntra.com/" },
   ];
 
   const handleBackgroundClick = (event) => {
@@ -62,22 +62,32 @@ const Modal = ({ onClose, selectedTab: initialTab }) => {
 
   const handleToggle = async (event) => {
     const isActive = event.target.checked;
+    console.log("Checkbox toggled:", isActive); // Debugging line
 
-    if (!isActive) return;
+    if (!isActive) return; // Do nothing if the toggle is off
 
-    const type = selectedTab === "Link" ? "link" : "shop";
-
+    // Check if both title and URL are filled out
     if (!title || !url) {
       showToast("Title and URL are required", "error");
+      console.log("Title or URL missing, cannot create link."); // Debugging line
       return;
     }
 
+    const type = selectedTab === "Link" ? "link" : "shop";
+    console.log("Creating link of type:", type); // Debugging line
+
+    setIsLoading(true); // Set loading state to true
+
     try {
-      await createLink(type, title, url);
+      console.log("Calling createLink API with title:", title, "and url:", url); // Debugging line
+      await createLink(type, title, url); // Call API to create the link
       showToast("Link created successfully!", "success");
       onClose();
     } catch (error) {
+      console.error("Error creating link:", error); // Debugging line
       showToast(error.response?.data?.message || "Failed to create link", "error");
+    } finally {
+      setIsLoading(false); // Set loading state back to false
     }
   };
 
@@ -93,6 +103,11 @@ const Modal = ({ onClose, selectedTab: initialTab }) => {
   const handleDeleteUrl = () => {
     setUrl("");
     showToast("URL cleared!", "success");
+  };
+
+  const handleAppClick = (appUrl) => {
+    console.log("App clicked, setting URL to:", appUrl); // Debugging line
+    setUrl(appUrl);  // Set the URL when an app is clicked
   };
 
   return (
@@ -161,7 +176,7 @@ const Modal = ({ onClose, selectedTab: initialTab }) => {
           <label className={styles.title}>Applications</label>
           <div className={styles.applications}>
             {(selectedTab === "Link" ? linkApps : shopApps).map((app, index) => (
-              <div className={styles.app} key={index}>
+              <div className={styles.app} key={index} onClick={() => handleAppClick(app.url)}>
                 <div className={styles.image}>
                   <img
                     src={app.icon}

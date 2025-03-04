@@ -34,16 +34,59 @@ ChartJS.register(
   Legend
 );
 
+
+
 const Analytics = () => {
 
 
   const [trafficData, setTrafficData] = useState([]);
+ 
+  
+
+  const aggregateViewsPerMonth = () => {
+    // Initialize an object to store sum of views per month
+    const viewsPerMonthMap = {};
+
+    // Loop through each link's viewsPerMonth data
+    trafficData.forEach(link => {
+      link.viewsPerMonth.forEach(view => {
+        const { month, year, count } = view;
+
+        // Generate a unique key for each month/year combination
+        const monthYearKey = `${month}-${year}`;
+
+        // If the key already exists, add the count, otherwise initialize it
+        if (viewsPerMonthMap[monthYearKey]) {
+          viewsPerMonthMap[monthYearKey] += count;
+        } else {
+          viewsPerMonthMap[monthYearKey] = count;
+        }
+      });
+    });
+
+    // Convert the aggregated data into an array of { month, year, count }
+    const aggregatedViews = Object.keys(viewsPerMonthMap).map(key => {
+      const [month, year] = key.split("-");
+      return { month, year: parseInt(year), count: viewsPerMonthMap[key] };
+    });
+
+    // Sort by year and month to ensure proper order
+    return aggregatedViews.sort((a, b) => {
+      const aDate = new Date(a.year, new Date(`${a.month} 1, 2020`).getMonth());
+      const bDate = new Date(b.year, new Date(`${b.month} 1, 2020`).getMonth());
+      return aDate - bDate;
+    });
+  };
+
+  // Generate the data for the Line chart
+  const aggregatedViews = aggregateViewsPerMonth();
+
   const lineChartData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+    labels: aggregatedViews.map((data) =>data.month),
     datasets: [
       {
-        label: "Clicks on Links",
-        data: [1200, 1900, 3000, 2500, 4000, 3500, 4200],
+        label: 'Views Per Month',
+        data: aggregatedViews.map((data) => data.count),
         borderColor: "#28A263",
         backgroundColor: "rgba(40, 162, 99, 0.2)",
         tension: 0.4,
@@ -54,7 +97,12 @@ const Analytics = () => {
 
   const apiUrl = import.meta.env.VITE_BASEURL;
   useEffect(() => {
-    axios.get(apiUrl + "/api/analytics", { withCredentials: true })
+    const token=localStorage.getItem("token");
+    axios.get(apiUrl + "/api/analytics", {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the token here in the Authorization header
+      },
+     })
       .then(res => {
         console.log(res.data)
         setTrafficData(res.data)
@@ -70,14 +118,16 @@ const Analytics = () => {
   // Prepare data for the Bar Chart (Traffic by Device)
   const deviceData = trafficData.reduce((acc, item) => {
     item.deviceStats.forEach((deviceStat) => {
-      if (acc[deviceStat.device]) {
-        acc[deviceStat.device] += deviceStat.clicks;
-      } else {
-        acc[deviceStat.device] = deviceStat.clicks;
-      }
-    });
-    return acc;
-  }, {});
+      const deviceName = deviceStat._id;  // Use _id as the device name
+    const clicks = deviceStat.count;   // Get the click count for this device
+    if (acc[deviceName]) {
+      acc[deviceName] += clicks;
+    } else {
+      acc[deviceName] = clicks;
+    }
+  });
+  return acc;
+}, {});
 
   const deviceLabels = Object.keys(deviceData);
   const deviceClicks = Object.values(deviceData);
@@ -124,6 +174,14 @@ const Analytics = () => {
   };
 
   const totalClicks = trafficData.reduce((acc, link) => acc + link.totalClicks, 0);
+  const linkTitles = trafficData.filter(link => link.type === 'link').map(link => link.title);
+  const totalClicksLink = trafficData.reduce((acc, link) => {
+    if (linkTitles.includes(link.title)) {
+      acc += link.totalClicks;
+    }
+    return acc;
+  }, 0);
+
   const shopTitles = trafficData.filter(link => link.type === 'shop').map(link => link.title);
   const totalClicksShop = trafficData.reduce((acc, link) => {
     if (shopTitles.includes(link.title)) {
@@ -132,8 +190,7 @@ const Analytics = () => {
     return acc;
   }, 0);
 
-  // FIXME:
-  const viewsPerMonth = []
+  
 
   return (
     <div className={styles.analyticsContainer}>
@@ -161,7 +218,7 @@ const Analytics = () => {
             {/* Clicks on Links */}
             <div className={styles.card}>
               <p>Clicks on Links</p>
-              <h2>{totalClicks}</h2> {/* Replace with actual total clicks data */}
+              <h2>{totalClicksLink}</h2> {/* Replace with actual total clicks data */}
             </div>
             {/* Click on Shop */}
             <div className={`${styles.card} ${styles.lightGreen}`}>
@@ -179,10 +236,10 @@ const Analytics = () => {
           <div className={styles.chartFullWidth}>
             <Line
               data={{
-                labels: viewsPerMonth.map((data) => data.month), // Assuming 'viewsPerMonth' contains month-wise data
+                labels: aggregatedViews.map((data) => data.month), // Assuming 'viewsPerMonth' contains month-wise data
                 datasets: [{
                   label: 'Views Per Month',
-                  data: viewsPerMonth.map((data) => data.views), // Assuming each object in viewsPerMonth contains the 'views' data
+                  data: aggregatedViews.map((data) => data.count), // Assuming each object in viewsPerMonth contains the 'views' data
                   borderColor: '#36A2EB',
                   backgroundColor: 'rgba(54, 162, 235, 0.2)',
                   fill: true,

@@ -19,6 +19,8 @@ import { deleteLink } from "../utils/apis/link"; // Import API function
 import { updateProfile } from "../utils/apis/auth"; // Import update function
 import { getUserData } from "../utils/apis/auth"; // Import update function
 
+import axios from "axios";
+
 function Links() {
   const [selectedTab, setSelectedTab] = useState("Link");
   const [username, setUsername] = useState(""); // State for dynamic username
@@ -46,6 +48,7 @@ function Links() {
       type: type,
     });
   };
+  const baseUrl = import.meta.env.VITE_BASEURL;
 
   const colors = ["#342B26", "#FFFFFF", "#000000"];
   
@@ -135,7 +138,26 @@ function Links() {
   useEffect(() => {
     fetchUserData();
   }, []);
-
+  
+  const trackLinkClick = async (event,linkId) => {
+    event.preventDefault();
+    try {
+      // Send request to backend to track click
+       const response = await axios.get(baseUrl+'/api/analytics/'+linkId);
+      if (response.status === 200) {
+      console.log('Link click tracked');
+      // Redirect after tracking
+      setTimeout(() => {
+        const link = links.find(link => link._id === linkId);
+        if (link && link.url) {
+          window.location.href = link.url; // Redirect to the actual URL after delay
+        }
+      }, 2000);
+      }
+    } catch (error) {
+      console.error('Error tracking link click:', error);
+    }
+  };
   return (
     <div className={styles.container}>
        <ToastContainer />
@@ -175,7 +197,7 @@ function Links() {
           <div className={styles.linkList}>
             {filteredLinks.map((link, index) => (
               <div key={index} className={styles.frameLink}>
-                <a key={index} href={link.url} target="_blank" rel="noopener noreferrer" className={styles.frameLink}>
+                <a key={index} href={link.url} target="_blank" rel="noopener noreferrer" className={styles.frameLink} onClick={(event) => trackLinkClick(event,link._id)}>
                 <span className={styles.frameIcon}></span>
                 <span>{link.title || link.shortUrl}</span></a>
               </div>
@@ -185,7 +207,12 @@ function Links() {
           <p>No links available</p>
         )}
               </div>
-              <button className={styles.getConnected}>Get Connected</button>
+              <button className={styles.getConnected}> <a 
+    href="https://linktree-tan-one.vercel.app/login" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    style={{ textDecoration: 'none', color: 'inherit' }}>
+  Get Connected</a></button>
               <div className={styles.lastLogo}><img src={lastlogo} alt="" /></div>
             </div>
           </div>
